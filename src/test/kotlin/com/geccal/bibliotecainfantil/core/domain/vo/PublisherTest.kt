@@ -2,7 +2,7 @@ package com.geccal.bibliotecainfantil.core.domain.vo
 
 import com.geccal.bibliotecainfantil.core.domain.validator.handler.NotificationHandler
 import org.assertj.core.api.Assertions
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 internal class PublisherTest {
 

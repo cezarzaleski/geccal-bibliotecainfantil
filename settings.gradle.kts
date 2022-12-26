@@ -1,1 +1,1 @@
-rootProject.name = "explicit-architecture"
+rootProject.name = "biblioteca-infantil"

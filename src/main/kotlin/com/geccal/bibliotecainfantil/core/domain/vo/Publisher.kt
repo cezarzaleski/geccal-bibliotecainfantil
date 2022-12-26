@@ -13,6 +13,8 @@ data class Publisher private constructor(
         ): Publisher {
             return Publisher(value)
         }
+
+        fun from(value: String) = Publisher(value)
     }
 
     override fun validate(handler: ValidationHandler) {

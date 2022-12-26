@@ -19,7 +19,7 @@ class NotificationHandler(private val errors: MutableList<CustomError> = mutable
     override fun getErrors(): List<CustomError> = errors
     override fun <T> validate(validate: () -> T): T? {
         runCatching {
-            validate()
+            return validate()
         }.onFailure {
             when (it) {
                 is DomainException -> {

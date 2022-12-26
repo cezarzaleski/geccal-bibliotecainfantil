@@ -57,6 +57,34 @@ class Book private constructor(
             book.selfValidate(notification)
             return book
         }
+
+        fun from(
+            id: BookID,
+            name: String,
+            exemplary: Int,
+            status: StatusBook,
+            edition: String,
+            year: Int,
+            authors: MutableList<Author>,
+            publisher: Publisher,
+            origin: Origin,
+            createdAt: LocalDateTime,
+            updatedAt: LocalDateTime,
+            deletedAt: LocalDateTime? = null
+        ) = Book(
+            id = id,
+            name = name,
+            exemplary = exemplary,
+            status = status,
+            edition = edition,
+            year = year,
+            authors = authors,
+            publisher = publisher,
+            origin = origin,
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+            deletedAt = deletedAt
+        )
     }
 
     fun delete() {
