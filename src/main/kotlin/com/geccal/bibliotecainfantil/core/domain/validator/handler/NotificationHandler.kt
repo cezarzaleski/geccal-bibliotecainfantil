@@ -17,14 +17,17 @@ class NotificationHandler(private val errors: MutableList<CustomError> = mutable
     }
 
     override fun getErrors(): List<CustomError> = errors
-    @Suppress("TooGenericExceptionCaught")
     override fun <T> validate(validate: () -> T): T? {
-        try {
-            return validate()
-        } catch (ex: DomainException) {
-            errors.addAll(ex.errors)
-        } catch (t: Throwable) {
-            t.message?.let { CustomError(it) }?.let { errors.add(it) }
+        runCatching {
+            validate()
+        }.onFailure {
+            when (it) {
+                is DomainException -> {
+                    errors.addAll(it.errors)
+                }
+
+                else -> it.message?.let { message -> CustomError(message) }?.let { message -> errors.add(message) }
+            }
         }
         return null
     }
@@ -37,6 +40,7 @@ class NotificationHandler(private val errors: MutableList<CustomError> = mutable
                 is DomainException -> {
                     errors.addAll(it.errors)
                 }
+
                 else -> it.message?.let { message -> CustomError(message) }?.let { message -> errors.add(message) }
             }
         }
@@ -47,6 +51,7 @@ class NotificationHandler(private val errors: MutableList<CustomError> = mutable
         fun create(t: Throwable): NotificationHandler {
             return t.message?.let { create(CustomError(it)) } ?: create()
         }
+
         fun create(): NotificationHandler = NotificationHandler()
         fun create(customError: CustomError): NotificationHandler = NotificationHandler().append(customError)
     }
