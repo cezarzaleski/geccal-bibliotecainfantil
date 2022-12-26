@@ -6,7 +6,6 @@ import org.junit.Test
 
 internal class OriginTest {
 
-
     @Test
     fun `should create Origin with success`() {
         val nameExpected = "ACQUISITION"

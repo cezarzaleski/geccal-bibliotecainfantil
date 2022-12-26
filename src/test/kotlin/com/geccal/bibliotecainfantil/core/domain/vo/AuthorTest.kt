@@ -4,7 +4,6 @@ import com.geccal.bibliotecainfantil.core.domain.validator.handler.NotificationH
 import org.assertj.core.api.Assertions
 import org.junit.Test
 
-
 internal class AuthorTest {
 
     private val notification = NotificationHandler.create()
@@ -28,5 +27,4 @@ internal class AuthorTest {
         Assertions.assertThat(notification.getErrors()).isNotEmpty
         Assertions.assertThat(notification.getErrors().first().message).isEqualTo("author: Is empty")
     }
-
 }

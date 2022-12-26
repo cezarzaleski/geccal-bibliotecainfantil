@@ -3,14 +3,14 @@ package com.geccal.bibliotecainfantil.core.domain.entity
 import com.geccal.bibliotecainfantil.core.domain.AggregateRoot
 import com.geccal.bibliotecainfantil.core.domain.exception.NotificationException
 import com.geccal.bibliotecainfantil.core.domain.validator.BookValidate
+import com.geccal.bibliotecainfantil.core.domain.validator.ValidationHandler
+import com.geccal.bibliotecainfantil.core.domain.validator.handler.NotificationHandler
 import com.geccal.bibliotecainfantil.core.domain.vo.Author
 import com.geccal.bibliotecainfantil.core.domain.vo.Origin
 import com.geccal.bibliotecainfantil.core.domain.vo.Publisher
 import com.geccal.bibliotecainfantil.core.domain.vo.StatusBook
-import com.geccal.bibliotecainfantil.core.domain.validator.ValidationHandler
-import com.geccal.bibliotecainfantil.core.domain.validator.handler.NotificationHandler
 import java.time.LocalDateTime
-
+@Suppress("LongParameterList")
 class Book private constructor(
     override val id: BookID,
     val name: String,
@@ -22,8 +22,8 @@ class Book private constructor(
     val publisher: Publisher,
     val origin: Origin,
     val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime,
-    val deletedAt: LocalDateTime? = null
+    var updatedAt: LocalDateTime,
+    var deletedAt: LocalDateTime? = null
 ) : AggregateRoot<BookID>(id) {
 
     companion object {
@@ -59,6 +59,10 @@ class Book private constructor(
         }
     }
 
+    fun delete() {
+        deletedAt = LocalDateTime.now()
+    }
+
     private fun selfValidate(notification: ValidationHandler) {
         validate(notification)
         id.validate(notification)
@@ -73,5 +77,3 @@ class Book private constructor(
         BookValidate(this, handler).validate()
     }
 }
-
-

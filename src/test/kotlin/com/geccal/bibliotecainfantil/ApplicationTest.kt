@@ -1,4 +1,3 @@
 package com.geccal.bibliotecainfantil
 
-class ApplicationTest {
-}
+class ApplicationTest

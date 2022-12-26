@@ -4,7 +4,6 @@ import com.geccal.bibliotecainfantil.core.domain.validator.handler.NotificationH
 import org.assertj.core.api.Assertions
 import org.junit.Test
 
-
 internal class PublisherTest {
 
     private val notification = NotificationHandler.create()

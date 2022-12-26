@@ -17,7 +17,7 @@ class NotificationHandler(private val errors: MutableList<CustomError> = mutable
     }
 
     override fun getErrors(): List<CustomError> = errors
-
+    @Suppress("TooGenericExceptionCaught")
     override fun <T> validate(validate: () -> T): T? {
         try {
             return validate()
@@ -46,7 +46,6 @@ class NotificationHandler(private val errors: MutableList<CustomError> = mutable
     companion object {
         fun create(t: Throwable): NotificationHandler {
             return t.message?.let { create(CustomError(it)) } ?: create()
-
         }
         fun create(): NotificationHandler = NotificationHandler()
         fun create(customError: CustomError): NotificationHandler = NotificationHandler().append(customError)

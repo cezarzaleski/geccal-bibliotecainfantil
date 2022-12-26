@@ -8,7 +8,6 @@ internal class BookTest {
 
     private val publisherExpected = "FEB"
 
-
     @Test
     fun `validator should return errors when validation fails`() {
         val notification = NotificationHandler.create()
@@ -31,7 +30,6 @@ internal class BookTest {
         }
         assertThat(notification.getErrors()).isNotEmpty
         assertThat(notification.getErrors().first().message).isEqualTo("name: Is empty")
-
     }
 
     @Test
@@ -56,7 +54,6 @@ internal class BookTest {
         assertThat(book.edition).isEqualTo(editionExpected)
         assertThat(book.year).isEqualTo(yearExpected)
         assertThat(book.origin.name).isEqualTo(originExpected)
-
     }
 
     @Test
@@ -81,6 +78,5 @@ internal class BookTest {
         }
         assertThat(notification.getErrors()).isNotEmpty
         assertThat(notification.getErrors().first().message).isEqualTo("origin: Is invalid")
-
     }
 }
