@@ -5,6 +5,11 @@ val assertj_version: String by project
 val detekt_version: String by project
 val junit_version: String by project
 val mockk_version: String by project
+val vertex_mysql_version: String by project
+val flyway_version: String by project
+val testcontainers_version: String by project
+val mysql_version: String by project
+val flyway_mysql_version: String by project
 
 plugins {
     application
@@ -14,7 +19,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.22.0"
 }
 
-group = "com.example"
+group = "com.geccal"
 version = "0.0.1"
 application {
     mainClass.set("com.geccal.bibliotecainfantil.ApplicationKt")
@@ -32,6 +37,16 @@ dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
+
+    // Database
+    implementation("org.flywaydb:flyway-core:$flyway_version")
+    implementation("org.flywaydb:flyway-mysql:$flyway_mysql_version")
+    implementation("io.vertx:vertx-mysql-client:$vertex_mysql_version")
+    implementation("io.vertx:vertx-lang-kotlin:$vertex_mysql_version")
+    implementation("io.vertx:vertx-lang-kotlin-coroutines:$vertex_mysql_version")
+    implementation("io.vertx:vertx-sql-client-templates:$vertex_mysql_version")
+    implementation("mysql:mysql-connector-java:$mysql_version")
+
     detekt("io.gitlab.arturbosch.detekt:detekt-cli:$detekt_version")
     detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$detekt_version")
 
@@ -42,6 +57,13 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junit_version")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_version")
     testImplementation("io.mockk:mockk:$mockk_version")
+    testImplementation("org.testcontainers:mysql:$testcontainers_version")
+    testImplementation("org.testcontainers:junit-jupiter:$testcontainers_version")
+    testImplementation("net.java.dev.jna:jna-platform"){
+        version {
+            strictly("[5.7,5.10]")
+        }
+    }
 
 }
 
