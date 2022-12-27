@@ -4,5 +4,5 @@ import com.geccal.bibliotecainfantil.core.domain.entity.Book
 
 interface BookRepository {
 
-    fun create(book: Book): Book
+    suspend fun create(book: Book): Book
 }

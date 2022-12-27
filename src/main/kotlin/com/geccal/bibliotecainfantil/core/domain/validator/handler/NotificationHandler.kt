@@ -32,21 +32,6 @@ class NotificationHandler(private val errors: MutableList<CustomError> = mutable
         return null
     }
 
-    operator fun ValidationHandler.invoke(validation: ValidationHandler.Validation): ValidationHandler {
-        runCatching {
-            validation.validate()
-        }.onFailure {
-            when (it) {
-                is DomainException -> {
-                    errors.addAll(it.errors)
-                }
-
-                else -> it.message?.let { message -> CustomError(message) }?.let { message -> errors.add(message) }
-            }
-        }
-        return this
-    }
-
     companion object {
         fun create(t: Throwable): NotificationHandler {
             return t.message?.let { create(CustomError(it)) } ?: create()

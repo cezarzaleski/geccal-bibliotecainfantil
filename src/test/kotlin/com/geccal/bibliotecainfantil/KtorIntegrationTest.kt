@@ -1,8 +1,6 @@
 package com.geccal.bibliotecainfantil
 
-
 import org.flywaydb.core.Flyway
-import org.flywaydb.core.api.configuration.ClassicConfiguration
 import org.junit.jupiter.api.BeforeAll
 import org.testcontainers.containers.JdbcDatabaseContainer
 import org.testcontainers.containers.MySQLContainer

@@ -9,7 +9,7 @@ import com.geccal.bibliotecainfantil.core.domain.validator.handler.NotificationH
 class CreateBookUseCase(
     private val bookRepository: BookRepository
 ) : UseCase<CreateBookCommand, CreateBookOutput> {
-    override fun execute(input: CreateBookCommand): CreateBookOutput {
+    override suspend fun execute(input: CreateBookCommand): CreateBookOutput {
         val notificationHandler = NotificationHandler.create()
         val book = notificationHandler.validate {
             Book.create(
@@ -30,7 +30,7 @@ class CreateBookUseCase(
         } else create(book!!)
     }
 
-    private fun create(book: Book): CreateBookOutput {
+    private suspend fun create(book: Book): CreateBookOutput {
         val createdBook = bookRepository.create(book)
         return CreateBookOutput.from(createdBook)
     }

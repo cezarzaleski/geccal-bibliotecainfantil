@@ -3,9 +3,10 @@ package com.geccal.bibliotecainfantil.core.application.book.create
 import com.geccal.bibliotecainfantil.builder.BookBuilder
 import com.geccal.bibliotecainfantil.builder.CreateBookCommandBuilder
 import com.geccal.bibliotecainfantil.core.domain.repository.BookRepository
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -17,11 +18,11 @@ internal class CreateBookUseCaseTest {
     private val subject = CreateBookUseCase(bookRepository)
 
     @Test
-    fun `should create Book with success`() {
+    fun `should create Book with success`(): Unit = runBlocking {
         val createBookCommand = CreateBookCommandBuilder.build()
         val book = BookBuilder.build()
 
-        every { bookRepository.create(any()) } returns book
+        coEvery { bookRepository.create(any()) } returns book
 
         val result = subject.execute(createBookCommand)
 
