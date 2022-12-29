@@ -8,6 +8,7 @@ import com.geccal.bibliotecainfantil.core.domain.vo.Publisher
 import com.geccal.bibliotecainfantil.core.domain.vo.StatusBook
 import com.geccal.bibliotecainfantil.infra.database.Connection
 import io.vertx.sqlclient.Row
+import io.vertx.sqlclient.RowSet
 
 class BookVertexRepository(
     private val connection: Connection
@@ -36,6 +37,13 @@ class BookVertexRepository(
             params = params
         )
         return book
+    }
+
+    override suspend fun findById(id: BookID): Book {
+        val bookDataList = connection.query<RowSet<Row>>("select b.* from books b " +
+                "where b.id = #{id}", mapOf("id" to id.value))
+        if (bookDataList.size() == 0) throw Error("Book not found")
+        return bookDataList.first().toBook()
     }
 
     private fun Row.toBook(): Book {
