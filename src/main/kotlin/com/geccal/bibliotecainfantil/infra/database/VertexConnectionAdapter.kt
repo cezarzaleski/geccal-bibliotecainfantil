@@ -26,7 +26,7 @@ class VertexConnectionAdapter(
         client = MySQLPool.pool(connectOptions, poolOptions)
     }
 
-    override suspend fun <T> query(statement: String, params: Map<String, Any>?): T? {
+    override suspend fun <T> query(statement: String, params: Map<String, Any>?): T {
             return SqlTemplate
                 .forQuery(client, statement)
                 .execute(params)
