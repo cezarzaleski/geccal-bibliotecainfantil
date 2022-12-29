@@ -29,7 +29,7 @@ class BookVertexRepository(
             "updatedAt" to book.updatedAt,
             "deletedAt" to book.deletedAt,
         )
-        connection.persist<Row>(
+        connection.persist(
             "insert into books (id, name, exemplary, status, edition, year, publisher, origin, authors, " +
                     "createdAt, updatedAt, deletedAt) " +
                     "values (#{id}, #{name}, #{exemplary}, #{status}, #{edition}, #{year}, #{publisher}, #{origin}, " +

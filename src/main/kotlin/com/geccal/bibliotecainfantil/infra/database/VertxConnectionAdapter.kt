@@ -33,7 +33,7 @@ class VertxConnectionAdapter(
                 .await() as T
     }
 
-    override suspend fun <T> persist(statement: String, params: Map<String, Any?>?) {
+    override suspend fun persist(statement: String, params: Map<String, Any?>) {
         SqlTemplate
             .forUpdate(client, statement)
             .execute(params)
