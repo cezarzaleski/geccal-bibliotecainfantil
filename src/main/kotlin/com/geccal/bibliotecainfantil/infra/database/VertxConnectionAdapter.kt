@@ -5,7 +5,7 @@ import io.vertx.mysqlclient.MySQLPool
 import io.vertx.sqlclient.PoolOptions
 import io.vertx.sqlclient.templates.SqlTemplate
 
-class VertexConnectionAdapter(
+class VertxConnectionAdapter(
     private val aPort: Int,
     private val anHost: String,
     private val anUser: String,

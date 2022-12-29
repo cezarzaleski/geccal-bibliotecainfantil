@@ -1,7 +1,7 @@
 package com.geccal.bibliotecainfantil
 
 import com.geccal.bibliotecainfantil.infra.database.Connection
-import com.geccal.bibliotecainfantil.infra.database.VertexConnectionAdapter
+import com.geccal.bibliotecainfantil.infra.database.VertxConnectionAdapter
 import org.flywaydb.core.Flyway
 import org.junit.jupiter.api.BeforeAll
 import org.testcontainers.containers.JdbcDatabaseContainer
@@ -25,7 +25,7 @@ open class KtorIntegrationTest {
         @BeforeAll
         @JvmStatic
         fun beforeAll() {
-            connection = VertexConnectionAdapter(
+            connection = VertxConnectionAdapter(
                 anHost = container.host,
                 anUser = container.username,
                 aPassword = container.password,
