@@ -1,5 +1,7 @@
 package com.geccal.bibliotecainfantil
 
+import com.geccal.bibliotecainfantil.infra.database.Connection
+import com.geccal.bibliotecainfantil.infra.database.VertexConnectionAdapter
 import org.flywaydb.core.Flyway
 import org.junit.jupiter.api.BeforeAll
 import org.testcontainers.containers.JdbcDatabaseContainer
@@ -7,7 +9,6 @@ import org.testcontainers.containers.MySQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
-import kotlin.properties.Delegates
 
 @Testcontainers
 open class KtorIntegrationTest {
@@ -19,17 +20,18 @@ open class KtorIntegrationTest {
             withPassword("test")
             withDatabaseName("test_biblioteca_infantil")
         }
-        var username: String = container.username
-        var password: String = container.password
-        var dabaseName: String = container.databaseName
-        lateinit var host: String
-        var port by Delegates.notNull<Int>()
+        lateinit var connection: Connection
 
         @BeforeAll
         @JvmStatic
         fun beforeAll() {
-            host = container.host
-            port = container.jdbcUrl.replace(Regex("[^-?0-9]+"), "").toInt()
+            connection = VertexConnectionAdapter(
+                anHost = container.host,
+                anUser = container.username,
+                aPassword = container.password,
+                aPort = container.jdbcUrl.replace(Regex("[^-?0-9]+"), "").toInt(),
+                aDatabaseName = container.databaseName
+            )
             migrateFlyway()
         }
 
