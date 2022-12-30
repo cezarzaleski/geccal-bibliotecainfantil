@@ -4,7 +4,7 @@ import com.geccal.bibliotecainfantil.infra.configuration.EnvironmentConfiguratio
 
 object ConnectionFactory {
 
-    private val port = EnvironmentConfiguration.getString("database.config.mysql.port").toInt()
+    private val port = EnvironmentConfiguration.getInt("database.config.mysql.port")
     private val host = EnvironmentConfiguration.getString("database.config.mysql.host")
     private val user = EnvironmentConfiguration.getString("database.config.mysql.username")
     private val password = EnvironmentConfiguration.getString("database.config.mysql.password")
