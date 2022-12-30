@@ -1,4 +1,4 @@
-package com.geccal.bibliotecainfantil.boundaries.api.book;
+package com.geccal.bibliotecainfantil.boundaries.api.book
 
 import com.geccal.bibliotecainfantil.bibliotecaInfantil
 import com.geccal.bibliotecainfantil.builder.BookBuilder
@@ -43,9 +43,7 @@ class BooksRouterKtTest {
 
         assertThat(HttpStatusCode.Created).isEqualTo(response.status)
 
-
         coVerify { createBookUseCase.execute(any()) }
         assertThat(expected.toJson()).isEqualTo(response.bodyAsText())
     }
-
 }
