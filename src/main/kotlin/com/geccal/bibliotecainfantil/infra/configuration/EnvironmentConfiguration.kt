@@ -3,8 +3,8 @@ package com.geccal.bibliotecainfantil.infra.configuration
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 
-object Environment {
-    val config: Config = ConfigFactory.load("sysEnv.conf").resolve()
+object EnvironmentConfiguration {
+    private val config: Config = ConfigFactory.load("sysEnv.conf").resolve()
 
     fun getString(propertyName: String): String = config.getString(propertyName)
     fun getInt(propertyName: String): Int = config.getInt(propertyName)

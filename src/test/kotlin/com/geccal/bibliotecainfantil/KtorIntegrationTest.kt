@@ -11,6 +11,7 @@ import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
 
 @Testcontainers
+@Suppress("UtilityClassWithPublicConstructor")
 open class KtorIntegrationTest {
 
     companion object {

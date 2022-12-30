@@ -23,4 +23,3 @@ fun Routing.booksRouter(createBookUseCase: CreateBookUseCase) {
         }
     }
 }
-

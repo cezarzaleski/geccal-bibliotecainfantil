@@ -2,6 +2,7 @@ package com.geccal.bibliotecainfantil.infra.repository
 
 import com.geccal.bibliotecainfantil.core.domain.entity.Book
 import com.geccal.bibliotecainfantil.core.domain.entity.BookID
+import com.geccal.bibliotecainfantil.core.domain.exception.NotFoundException
 import com.geccal.bibliotecainfantil.core.domain.repository.BookRepository
 import com.geccal.bibliotecainfantil.core.domain.vo.Origin
 import com.geccal.bibliotecainfantil.core.domain.vo.Publisher
@@ -42,7 +43,7 @@ class BookVertexRepository(
     override suspend fun findById(id: BookID): Book {
         val bookDataList = connection.query<RowSet<Row>>("select b.* from books b " +
                 "where b.id = #{id}", mapOf("id" to id.value))
-        if (bookDataList.size() == 0) throw Error("Book not found")
+        if (bookDataList.size() == 0) throw NotFoundException.from("Book", id)
         return bookDataList.first().toBook()
     }
 
