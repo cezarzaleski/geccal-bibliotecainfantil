@@ -46,6 +46,9 @@ dependencies {
     implementation("io.vertx:vertx-lang-kotlin-coroutines:$vertex_mysql_version")
     implementation("io.vertx:vertx-sql-client-templates:$vertex_mysql_version")
     implementation("mysql:mysql-connector-java:$mysql_version")
+    implementation("io.ktor:ktor-server-cors-jvm:2.1.3")
+    implementation("io.ktor:ktor-server-auto-head-response-jvm:2.1.3")
+    implementation("io.ktor:ktor-server-call-logging-jvm:2.1.3")
 
     detekt("io.gitlab.arturbosch.detekt:detekt-cli:$detekt_version")
     detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$detekt_version")
