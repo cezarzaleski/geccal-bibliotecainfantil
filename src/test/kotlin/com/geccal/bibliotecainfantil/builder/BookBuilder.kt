@@ -17,7 +17,7 @@ object BookBuilder {
         status: StatusBook = StatusBook.AVAILABLE,
         edition: String = "1ª",
         year: Int = 2022,
-        authors: MutableList<Author> = mutableListOf(),
+        authors: MutableList<Author> = mutableListOf(Author.create("AuthorFake")),
         publisher: Publisher = Publisher.from("FEB"),
         origin: Origin = Origin.ACQUISITION,
         createdAt: LocalDateTime = LocalDateTime.now(),
