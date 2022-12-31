@@ -46,6 +46,13 @@ open class KtorIntegrationTest {
             migration.migrate()
         }
     }
+
+    suspend fun cleanUp(tables: List<String>) {
+        tables.forEach {table ->
+            connection.persist("TRUNCATE $table", emptyMap())
+        }
+
+    }
 }
 
 fun mysql(imageName: String, configs: JdbcDatabaseContainer<Nothing>.() -> Unit) =
