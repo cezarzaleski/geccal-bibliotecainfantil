@@ -53,6 +53,8 @@ dependencies {
     implementation("io.ktor:ktor-client-jackson:$ktor_version")
     implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-serialization-jackson:$ktor_version")
+    implementation("io.ktor:ktor-server-host-common-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-status-pages-jvm:$ktor_version")
 
     detekt("io.gitlab.arturbosch.detekt:detekt-cli:$detekt_version")
     detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$detekt_version")
