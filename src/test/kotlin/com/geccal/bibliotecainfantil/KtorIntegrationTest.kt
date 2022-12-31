@@ -48,10 +48,9 @@ open class KtorIntegrationTest {
     }
 
     suspend fun cleanUp(tables: List<String>) {
-        tables.forEach {table ->
+        tables.forEach { table ->
             connection.persist("TRUNCATE $table", emptyMap())
         }
-
     }
 }
 
