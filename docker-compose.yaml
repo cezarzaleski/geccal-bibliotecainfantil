@@ -1,6 +1,15 @@
 version: "3.7"
 
 services:
+  app:
+    build: .
+    container_name: geccal_biblioteca_infantil_api
+    ports:
+      - 8080:8080
+    networks:
+      - bibliotecainfantil
+    depends_on:
+      - mysql
   mysql:
       container_name: geccal_biblioteca_infantil_mysql
       image: mysql:latest
