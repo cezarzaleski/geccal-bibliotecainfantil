@@ -23,6 +23,16 @@ services:
         - mysql:/var/lib/mysql
       networks:
         - bibliotecainfantil
+
+  flyway:
+    image: flyway/flyway
+    command: -X -url=jdbc:mysql://mysql:3306/biblioteca-infantil -user=root -password=123456 -connectRetries=60 migrate
+    volumes:
+      - ./src/main/resources/db/migration:/flyway/sql
+    depends_on:
+      - mysql
+    networks:
+      - bibliotecainfantil
 volumes:
   data:
   mysql:
