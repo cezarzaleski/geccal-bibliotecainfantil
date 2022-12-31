@@ -3,6 +3,8 @@ package com.geccal.bibliotecainfantil.infra.repository
 import com.geccal.bibliotecainfantil.core.domain.entity.Book
 import com.geccal.bibliotecainfantil.core.domain.entity.BookID
 import com.geccal.bibliotecainfantil.core.domain.exception.NotFoundException
+import com.geccal.bibliotecainfantil.core.domain.pagination.Pagination
+import com.geccal.bibliotecainfantil.core.domain.pagination.SearchQuery
 import com.geccal.bibliotecainfantil.core.domain.repository.BookRepository
 import com.geccal.bibliotecainfantil.core.domain.vo.Origin
 import com.geccal.bibliotecainfantil.core.domain.vo.Publisher
@@ -42,10 +44,39 @@ class BookVertexRepository(
     }
 
     override suspend fun findById(id: BookID): Book {
-        val bookDataList = connection.query<RowSet<Row>>("select b.* from books b " +
-                "where b.id = #{id}", mapOf("id" to id.value))
+        val bookDataList = connection.query<RowSet<Row>>("SELECT id, name, exemplary, status, edition, " +
+                "year, publisher, origin, authors, createdAt, updatedAt, deletedAt " +
+                "FROM books " +
+                "WHERE id = #{id}", mapOf("id" to id.value))
         if (bookDataList.size() == 0) throw NotFoundException.from("Book", id)
         return bookDataList.first().toBook()
+    }
+
+    override suspend fun findAll(query: SearchQuery): Pagination<Book> {
+        val (page, perPage, terms, sort, direction) = query
+
+        var statement = "SELECT id, name, exemplary, status, edition, " +
+                "year, publisher, origin, authors, createdAt, updatedAt, deletedAt " +
+                "FROM books " +
+                "WHERE 1=1 "
+        if (terms.isNotEmpty()) {
+            statement += "AND ((LOWER(name) LIKE #{terms}) OR (LOWER(publisher) LIKE #{terms})) "
+        }
+        val statementCount = "SELECT count(1) as total from ($statement) as query"
+        statement += "ORDER BY $sort $direction LIMIT $perPage OFFSET $page"
+
+        val params = mapOf(
+            "terms" to "%${terms.lowercase()}%"
+        )
+        val bookDataList = connection.query<RowSet<Row>>(statement, params)
+        val countResult = connection.query<RowSet<Row>>(statementCount, params)
+        if (bookDataList.size() == 0) return Pagination.empty(page, perPage)
+        return Pagination(
+            currentPage = page,
+            perPage = perPage,
+            total = countResult.first().getLong("total"),
+            items = bookDataList.map { it.toBook() }
+        )
     }
 
     private fun Row.toBook(): Book {
@@ -64,19 +95,4 @@ class BookVertexRepository(
             authors = arrayListOf(),
         )
     }
-
-//    private fun Row.toItem(): Item {
-//        return Item(
-//            id = getInteger("id_item"),
-//            category = getString("category"),
-//            description = getString("description"),
-//            price = getBigDecimal("price"),
-//            weight = getInteger("weight"),
-//            dimension = Dimension(
-//                getInteger("width"),
-//                getInteger("height"),
-//                getInteger("length"),
-//            )
-//        )
-//    }
 }
