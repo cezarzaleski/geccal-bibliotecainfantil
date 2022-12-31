@@ -1,6 +1,7 @@
 package com.geccal.bibliotecainfantil
 
 import com.geccal.bibliotecainfantil.boundaries.api.book.booksRouter
+import com.geccal.bibliotecainfantil.boundaries.api.configuration.statusPages
 import com.geccal.bibliotecainfantil.boundaries.api.configureRouting
 import com.geccal.bibliotecainfantil.infra.configuration.Usecases
 import com.geccal.bibliotecainfantil.infra.extension.JsonMapper
@@ -17,6 +18,7 @@ import io.ktor.server.plugins.autohead.AutoHeadResponse
 import io.ktor.server.plugins.callloging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.cors.routing.CORS
+import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.request.path
 import io.ktor.server.routing.Routing
 import org.slf4j.event.Level
@@ -39,6 +41,10 @@ fun Application.bibliotecaInfantil(route: Routing.() -> Unit = {}) {
     install(CallLogging) {
         level = Level.INFO
         filter { call -> call.request.path().startsWith("/") }
+    }
+
+    install(StatusPages) {
+        statusPages()
     }
 
     install(CORS) {
