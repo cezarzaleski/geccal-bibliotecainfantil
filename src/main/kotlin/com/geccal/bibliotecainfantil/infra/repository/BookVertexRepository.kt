@@ -8,6 +8,7 @@ import com.geccal.bibliotecainfantil.core.domain.vo.Origin
 import com.geccal.bibliotecainfantil.core.domain.vo.Publisher
 import com.geccal.bibliotecainfantil.core.domain.vo.StatusBook
 import com.geccal.bibliotecainfantil.infra.database.Connection
+import com.geccal.bibliotecainfantil.infra.extension.toJson
 import io.vertx.sqlclient.Row
 import io.vertx.sqlclient.RowSet
 
@@ -25,7 +26,7 @@ class BookVertexRepository(
             "year" to book.year,
             "publisher" to book.publisher.value,
             "origin" to book.origin.name,
-            "authors" to book.authors,
+            "authors" to book.authors.toJson(),
             "createdAt" to book.createdAt,
             "updatedAt" to book.updatedAt,
             "deletedAt" to book.deletedAt,
