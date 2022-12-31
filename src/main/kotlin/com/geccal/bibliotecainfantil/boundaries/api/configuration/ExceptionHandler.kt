@@ -11,8 +11,12 @@ fun StatusPagesConfig.statusPages() {
     exception<ValidationException> { call, cause ->
         val httpStatus = getExceptionCode(cause)
         val exceptionMessage = cause.message
-
         call.respond(httpStatus, ErrorResponse(exceptionMessage.orEmpty(), cause.errors))
+    }
+    exception<Throwable> { call, cause ->
+        val httpStatus = getExceptionCode(cause)
+        val exceptionMessage = cause.message ?: "Error to process request. Please try again."
+        call.respond(httpStatus, ErrorResponse(exceptionMessage, emptyList()))
     }
 }
 
