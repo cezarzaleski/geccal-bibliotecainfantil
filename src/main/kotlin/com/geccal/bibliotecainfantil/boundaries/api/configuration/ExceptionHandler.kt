@@ -1,6 +1,7 @@
 package com.geccal.bibliotecainfantil.boundaries.api.configuration
 
 import com.geccal.bibliotecainfantil.core.application.exception.ValidationException
+import com.geccal.bibliotecainfantil.core.domain.validator.CustomError
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.plugins.BadRequestException
 import io.ktor.server.plugins.statuspages.StatusPagesConfig
@@ -11,7 +12,7 @@ fun StatusPagesConfig.statusPages() {
         val httpStatus = getExceptionCode(cause)
         val exceptionMessage = cause.message
 
-        call.respond(httpStatus, ErrorResponse(exceptionMessage.orEmpty(), emptyList()))
+        call.respond(httpStatus, ErrorResponse(exceptionMessage.orEmpty(), cause.errors))
     }
 }
 
@@ -23,4 +24,4 @@ private fun getExceptionCode(exception: Throwable): HttpStatusCode {
     }
 }
 
-data class ErrorResponse(val message: String, val details: List<Any>)
+data class ErrorResponse(val message: String, val details: List<CustomError>)
