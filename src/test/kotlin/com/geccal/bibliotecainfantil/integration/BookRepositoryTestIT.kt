@@ -40,6 +40,18 @@ class BookRepositoryTestIT : KtorIntegrationTest() {
         subject.create(book)
         val result = subject.findById(book.id)
         assertThat(result).isNotNull
+        assertThat(result.id.value).isEqualTo(book.id.value)
+        assertThat(result.name).isEqualTo(book.name)
+        assertThat(result.exemplary).isEqualTo(book.exemplary)
+        assertThat(result.status).isEqualTo(book.status)
+        assertThat(result.edition).isEqualTo(book.edition)
+        assertThat(result.year).isEqualTo(book.year)
+        assertThat(result.authors).isEqualTo(book.authors)
+        assertThat(result.publisher).isEqualTo(book.publisher)
+        assertThat(result.origin).isEqualTo(book.origin)
+        assertThat(result.createdAt).isEqualTo(book.createdAt)
+        assertThat(result.updatedAt).isEqualTo(book.updatedAt)
+        assertThat(result.deletedAt).isEqualTo(book.deletedAt)
     }
 
     @Test
@@ -52,6 +64,7 @@ class BookRepositoryTestIT : KtorIntegrationTest() {
         val searchQuery = SearchQuery(0, 1, "inferno", "name", "ASC")
         val result = subject.findAll(searchQuery)
         assertThat(result.total).isEqualTo(1L)
+        assertThat(result.items.first().id.value).isEqualTo(bookFirst.id.value)
     }
 
     @Test
@@ -66,5 +79,6 @@ class BookRepositoryTestIT : KtorIntegrationTest() {
         assertThat(result.currentPage).isEqualTo(0)
         assertThat(result.perPage).isEqualTo(1)
         assertThat(result.total).isEqualTo(2L)
+        assertThat(result.items.first().id.value).isEqualTo(bookSecond.id.value)
     }
 }
