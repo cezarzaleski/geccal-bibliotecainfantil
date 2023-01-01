@@ -6,6 +6,7 @@ import com.geccal.bibliotecainfantil.core.domain.exception.NotFoundException
 import com.geccal.bibliotecainfantil.core.domain.pagination.Pagination
 import com.geccal.bibliotecainfantil.core.domain.pagination.SearchQuery
 import com.geccal.bibliotecainfantil.core.domain.repository.BookRepository
+import com.geccal.bibliotecainfantil.core.domain.vo.Author
 import com.geccal.bibliotecainfantil.core.domain.vo.Origin
 import com.geccal.bibliotecainfantil.core.domain.vo.Publisher
 import com.geccal.bibliotecainfantil.core.domain.vo.StatusBook
@@ -28,7 +29,7 @@ class BookVertexRepository(
             "year" to book.year,
             "publisher" to book.publisher.value,
             "origin" to book.origin.name,
-            "authors" to book.authors.toJson(),
+            "authors" to book.authors.map { it.value }.toJson(),
             "createdAt" to book.createdAt,
             "updatedAt" to book.updatedAt,
             "deletedAt" to book.deletedAt,
@@ -92,7 +93,7 @@ class BookVertexRepository(
             createdAt = getLocalDateTime("createdAt"),
             updatedAt = getLocalDateTime("updatedAt"),
             deletedAt = getLocalDateTime("deletedAt"),
-            authors = arrayListOf(),
+            authors = (getJson("authors") as Iterable<*>).map { Author.create(it as String) }.toMutableList(),
         )
     }
 }
