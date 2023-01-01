@@ -2,6 +2,8 @@ package com.geccal.bibliotecainfantil.integration
 
 import com.geccal.bibliotecainfantil.KtorIntegrationTest
 import com.geccal.bibliotecainfantil.builder.BookBuilder
+import com.geccal.bibliotecainfantil.core.domain.entity.BookID
+import com.geccal.bibliotecainfantil.core.domain.exception.NotFoundException
 import com.geccal.bibliotecainfantil.core.domain.pagination.SearchQuery
 import com.geccal.bibliotecainfantil.core.domain.vo.Publisher
 import com.geccal.bibliotecainfantil.infra.repository.BookVertexRepository
@@ -11,6 +13,7 @@ import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
@@ -38,7 +41,9 @@ class BookRepositoryTestIT : KtorIntegrationTest() {
     fun `should find book by ID with success`(): Unit = runBlocking {
         val book = BookBuilder.build()
         subject.create(book)
+
         val result = subject.findById(book.id)
+
         assertThat(result).isNotNull
         assertThat(result.id.value).isEqualTo(book.id.value)
         assertThat(result.name).isEqualTo(book.name)
@@ -52,6 +57,18 @@ class BookRepositoryTestIT : KtorIntegrationTest() {
         assertThat(result.createdAt).isEqualTo(book.createdAt)
         assertThat(result.updatedAt).isEqualTo(book.updatedAt)
         assertThat(result.deletedAt).isEqualTo(book.deletedAt)
+    }
+
+    @Test
+    fun `should throws NotFoundException when find book by ID not exists`(): Unit = runBlocking {
+        val book = BookBuilder.build()
+        val bookID = BookID.unique()
+        subject.create(book)
+
+        assertThrows<NotFoundException> {
+            subject.findById(bookID)
+        }
+
     }
 
     @Test
