@@ -1,4 +1,4 @@
-package com.geccal.bibliotecainfantil.boundaries.api.book.models.extension
+package com.geccal.bibliotecainfantil.boundaries.api.model.extension
 
 import com.geccal.bibliotecainfantil.core.domain.pagination.Pagination
 import com.geccal.bibliotecainfantil.core.domain.pagination.SearchQuery

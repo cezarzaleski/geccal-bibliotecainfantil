@@ -1,6 +1,6 @@
 package com.geccal.bibliotecainfantil.builder
 
-import com.geccal.bibliotecainfantil.boundaries.api.book.models.CreateBookRequest
+import com.geccal.bibliotecainfantil.boundaries.api.book.model.CreateBookRequest
 
 object CreateBookRequestBuilder {
 

@@ -1,4 +1,4 @@
-package com.geccal.bibliotecainfantil.boundaries.api.book.models
+package com.geccal.bibliotecainfantil.boundaries.api.book.model
 
 import com.geccal.bibliotecainfantil.core.application.book.create.CreateBookCommand
 

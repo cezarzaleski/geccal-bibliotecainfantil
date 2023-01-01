@@ -1,7 +1,7 @@
 package com.geccal.bibliotecainfantil.boundaries.api.book
 
-import com.geccal.bibliotecainfantil.boundaries.api.book.models.CreateBookRequest
-import com.geccal.bibliotecainfantil.boundaries.api.book.models.extension.toSearchQuery
+import com.geccal.bibliotecainfantil.boundaries.api.book.model.CreateBookRequest
+import com.geccal.bibliotecainfantil.boundaries.api.model.extension.toSearchQuery
 import com.geccal.bibliotecainfantil.core.application.book.create.CreateBookUseCase
 import com.geccal.bibliotecainfantil.core.application.book.retrieve.list.ListBookUseCase
 import io.ktor.http.HttpStatusCode
