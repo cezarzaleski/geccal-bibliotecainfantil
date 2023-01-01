@@ -33,7 +33,9 @@ class BookRepositoryTestIT : KtorIntegrationTest() {
     @Test
     fun `should create book with success`(): Unit = runBlocking {
         val book = BookBuilder.build()
+
         val bookCreated = subject.create(book)
+
         assertThat(bookCreated).isNotNull
     }
 
@@ -80,6 +82,7 @@ class BookRepositoryTestIT : KtorIntegrationTest() {
 
         val searchQuery = SearchQuery(0, 1, "inferno", "name", "ASC")
         val result = subject.findAll(searchQuery)
+
         assertThat(result.total).isEqualTo(1L)
         assertThat(result.items.first().id.value).isEqualTo(bookFirst.id.value)
     }
@@ -93,6 +96,7 @@ class BookRepositoryTestIT : KtorIntegrationTest() {
 
         val searchQuery = SearchQuery(0, 1, "feb", "name", "ASC")
         val result = subject.findAll(searchQuery)
+
         assertThat(result.currentPage).isEqualTo(0)
         assertThat(result.perPage).isEqualTo(1)
         assertThat(result.total).isEqualTo(2L)
