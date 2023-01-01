@@ -5,7 +5,12 @@ import com.geccal.bibliotecainfantil.builder.BookBuilder
 import com.geccal.bibliotecainfantil.builder.CreateBookRequestBuilder
 import com.geccal.bibliotecainfantil.core.application.book.create.CreateBookOutput
 import com.geccal.bibliotecainfantil.core.application.book.create.CreateBookUseCase
+import com.geccal.bibliotecainfantil.core.application.book.retrieve.list.BookListOutput
+import com.geccal.bibliotecainfantil.core.application.book.retrieve.list.ListBookUseCase
+import com.geccal.bibliotecainfantil.core.domain.pagination.Pagination
 import com.geccal.bibliotecainfantil.infra.extension.toJson
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
@@ -25,9 +30,10 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MockKExtension::class)
 class BooksRouterKtTest {
     private val createBookUseCase: CreateBookUseCase = mockk()
+    private val listBookUseCase: ListBookUseCase = mockk()
 
     private val application = TestApplication {
-        application { bibliotecaInfantil { booksRouter(createBookUseCase) } }
+        application { bibliotecaInfantil { booksRouter(createBookUseCase, listBookUseCase) } }
     }
 
     @Test
@@ -44,6 +50,29 @@ class BooksRouterKtTest {
         assertThat(HttpStatusCode.Created).isEqualTo(response.status)
 
         coVerify { createBookUseCase.execute(any()) }
+        assertThat(expected.toJson()).isEqualTo(response.bodyAsText())
+    }
+
+    @Test
+    fun `should find all a book with pagination`(): Unit = runBlocking {
+        val client = application.client
+        val items = listOf(BookListOutput.from(BookBuilder.build()))
+        val page = 0
+        val perPage = 10
+        val expected = Pagination(currentPage = page, perPage = perPage, total = 1L, items = items)
+        coEvery { listBookUseCase.execute(any()) } returns expected
+
+        val response = client.get("/books") {
+            contentType(ContentType.Application.Json)
+            parameter("page", page)
+            parameter("perPage", perPage)
+            parameter("sort", "ASC")
+            parameter("direction", "name")
+        }
+
+        assertThat(HttpStatusCode.OK).isEqualTo(response.status)
+
+        coVerify { listBookUseCase.execute(any()) }
         assertThat(expected.toJson()).isEqualTo(response.bodyAsText())
     }
 }
