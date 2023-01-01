@@ -13,6 +13,8 @@ data class Pagination<T>(
         return Pagination(currentPage, perPage, total, aNewList)
     }
     companion object {
+        const val DEFAULT_PAGE = 0
+        const val DEFAULT_PER_PAGE = 30
         fun <T> empty(currentPage: Int, perPage: Int) = Pagination<T>(currentPage, perPage, 0L, emptyList())
     }
 }

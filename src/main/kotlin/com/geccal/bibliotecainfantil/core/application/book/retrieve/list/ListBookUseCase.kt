@@ -11,6 +11,6 @@ class ListBookUseCase(
     override suspend fun execute(input: SearchQuery): Pagination<BookListOutput> {
         return bookRepository
             .findAll(query = input)
-            .map{ BookListOutput.from(it)}
+            .map { BookListOutput.from(it) }
     }
 }
