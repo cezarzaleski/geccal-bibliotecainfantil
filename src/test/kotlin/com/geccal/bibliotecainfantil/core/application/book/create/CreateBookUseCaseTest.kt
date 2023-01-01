@@ -14,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MockKExtension::class)
 internal class CreateBookUseCaseTest {
     private val bookRepository = mockk<BookRepository>()
-
     private val subject = CreateBookUseCase(bookRepository)
 
     @Test

@@ -70,7 +70,6 @@ class BookRepositoryTestIT : KtorIntegrationTest() {
         assertThrows<NotFoundException> {
             subject.findById(bookID)
         }
-
     }
 
     @Test
