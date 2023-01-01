@@ -3,6 +3,7 @@ fun ignorePackagesInJacocoReport(classDirectories: ConfigurableFileCollection) {
         fileTree(it).apply {
             exclude(
                 "**/geccal/bibliotecainfantil/infra/configuration/**",
+                "**/geccal/bibliotecainfantil/boundaries/api/configuration/**",
                 )
         }
     }))
