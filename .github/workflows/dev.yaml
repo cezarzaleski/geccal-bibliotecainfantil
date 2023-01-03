@@ -20,7 +20,7 @@ jobs:
           distribution: 'adopt'
           cache: gradle
       - name: Run build with gradle
-        run: ./gradlew build -x test
+        run: ./gradlew build -x test -x componentTest
 
   test:
     name: Gradle Test
