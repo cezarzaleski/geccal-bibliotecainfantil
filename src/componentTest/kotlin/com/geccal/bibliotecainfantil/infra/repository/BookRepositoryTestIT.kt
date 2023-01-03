@@ -1,4 +1,4 @@
-package com.geccal.bibliotecainfantil.repository
+package com.geccal.bibliotecainfantil.infra.repository
 
 import com.geccal.bibliotecainfantil.IntegrationTest
 import com.geccal.bibliotecainfantil.builder.BookBuilder
@@ -6,7 +6,6 @@ import com.geccal.bibliotecainfantil.core.domain.entity.BookID
 import com.geccal.bibliotecainfantil.core.domain.exception.NotFoundException
 import com.geccal.bibliotecainfantil.core.domain.pagination.SearchQuery
 import com.geccal.bibliotecainfantil.core.domain.vo.Publisher
-import com.geccal.bibliotecainfantil.infra.repository.BookVertexRepository
 import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
