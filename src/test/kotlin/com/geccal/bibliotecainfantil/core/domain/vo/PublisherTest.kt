@@ -2,8 +2,10 @@ package com.geccal.bibliotecainfantil.core.domain.vo
 
 import com.geccal.bibliotecainfantil.core.domain.validator.handler.NotificationHandler
 import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 
+@Tag("unit")
 internal class PublisherTest {
 
     private val notification = NotificationHandler.create()

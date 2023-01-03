@@ -8,10 +8,12 @@ import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
+@Tag("unit")
 internal class CreateBookUseCaseTest {
     private val bookRepository = mockk<BookRepository>()
     private val subject = CreateBookUseCase(bookRepository)

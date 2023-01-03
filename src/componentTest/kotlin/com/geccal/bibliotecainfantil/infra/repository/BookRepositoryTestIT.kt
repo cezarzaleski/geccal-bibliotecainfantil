@@ -1,6 +1,6 @@
-package com.geccal.bibliotecainfantil.integration
+package com.geccal.bibliotecainfantil.repository
 
-import com.geccal.bibliotecainfantil.KtorIntegrationTest
+import com.geccal.bibliotecainfantil.IntegrationTest
 import com.geccal.bibliotecainfantil.builder.BookBuilder
 import com.geccal.bibliotecainfantil.core.domain.entity.BookID
 import com.geccal.bibliotecainfantil.core.domain.exception.NotFoundException
@@ -13,12 +13,14 @@ import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
 @ExperimentalCoroutinesApi
-class BookRepositoryTestIT : KtorIntegrationTest() {
+@Tag("component")
+class BookRepositoryTestIT : IntegrationTest() {
 
     private val subject = BookVertexRepository(
         connection
@@ -29,19 +31,9 @@ class BookRepositoryTestIT : KtorIntegrationTest() {
             cleanUp(listOf("books"))
         }
     }
-
     @Test
-    fun `should create book with success`(): Unit = runBlocking {
-        val book = BookBuilder.build()
-
-        val bookCreated = subject.create(book)
-
-        assertThat(bookCreated).isNotNull
-    }
-
-    @Test
-    fun `should find book by ID with success`(): Unit = runBlocking {
-        val book = BookBuilder.build()
+    fun `should find book by id with success`(): Unit = runBlocking {
+         val book = BookBuilder.build()
         subject.create(book)
 
         val result = subject.findById(book.id)

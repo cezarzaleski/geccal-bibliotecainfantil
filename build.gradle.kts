@@ -19,6 +19,13 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.22.0"
 }
 
+sourceSets {
+    create("componentTest") {
+        compileClasspath += sourceSets.main.get().output
+        runtimeClasspath += sourceSets.main.get().output
+    }
+}
+
 group = "com.geccal"
 version = "0.0.1"
 application {
@@ -73,6 +80,27 @@ dependencies {
             strictly("[5.7,5.10]")
         }
     }
+
+    val componentTest = task<Test>("componentTest") {
+        description = "Runs integration tests"
+        group = "verification"
+
+        testClassesDirs = sourceSets["componentTest"].output.classesDirs
+        classpath = sourceSets["componentTest"].runtimeClasspath
+        shouldRunAfter("test")
+    }
+
+    tasks.check { dependsOn(componentTest) }
+
+    val componentTestImplementation: Configuration by configurations.getting {
+        extendsFrom(configurations.testImplementation.get())
+    }
+
+    configurations["componentTestRuntimeOnly"].extendsFrom(configurations.runtimeOnly.get())
+
+
+    componentTestImplementation(sourceSets.test.get().output)
+
 
 }
 

@@ -12,7 +12,7 @@ import org.testcontainers.utility.DockerImageName
 
 @Testcontainers
 @Suppress("UtilityClassWithPublicConstructor")
-open class KtorIntegrationTest {
+open class IntegrationTest {
 
     companion object {
         @Container

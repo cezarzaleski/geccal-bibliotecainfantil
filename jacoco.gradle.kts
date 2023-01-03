@@ -12,7 +12,8 @@ fun ignorePackagesInJacocoReport(classDirectories: ConfigurableFileCollection) {
 val minimumTestCoverage = 0.80.toBigDecimal()
 
 val testReportFiles = listOf(
-    file("$buildDir/jacoco/test.exec")
+    file("$buildDir/jacoco/test.exec"),
+    file("$buildDir/jacoco/componentTest.exec")
 )
 
 tasks.withType<JacocoReport> {
