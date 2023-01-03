@@ -120,14 +120,14 @@ complexity:
     active: false
   StringLiteralDuplication:
     active: false
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     threshold: 3
     ignoreAnnotation: true
     excludeStringsWithLessThan5Characters: true
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     thresholdInFiles: 11
     thresholdInClasses: 11
     thresholdInInterfaces: 11
@@ -190,7 +190,7 @@ exceptions:
     methodNames: [toString, hashCode, equals, finalize]
   InstanceOfCheckForException:
     active: false
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
   NotImplementedDeclaration:
     active: false
   ObjectExtendsThrowable:
@@ -216,7 +216,7 @@ exceptions:
     active: false
   ThrowingExceptionsWithoutMessageOrCause:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     exceptions:
       - IllegalArgumentException
       - IllegalStateException
@@ -225,7 +225,7 @@ exceptions:
     active: true
   TooGenericExceptionCaught:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     exceptionNames:
       - ArrayIndexOutOfBoundsException
       - Error
@@ -328,7 +328,7 @@ formatting:
     autoCorrect: true
   NoWildcardImports:
     active: true
-    excludes: [ '**/test/**']
+    excludes: [ '**/test/**', '**/componentTest/**']
   PackageName:
     active: true
     autoCorrect: true
@@ -384,41 +384,41 @@ naming:
   active: true
   ClassNaming:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     classPattern: '[A-Z][a-zA-Z0-9]*'
   ConstructorParameterNaming:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     parameterPattern: '[a-z][A-Za-z0-9]*'
     privateParameterPattern: '[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
     ignoreOverridden: true
   EnumNaming:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     enumEntryPattern: '[A-Z][_a-zA-Z0-9]*'
   ForbiddenClassName:
     active: false
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     forbiddenName: []
   FunctionMaxLength:
     active: false
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     maximumFunctionNameLength: 30
   FunctionMinLength:
     active: false
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     minimumFunctionNameLength: 3
   FunctionNaming:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     functionPattern: '([a-z][a-zA-Z0-9]*)|(`.*`)'
     excludeClassPattern: '$^'
     ignoreOverridden: true
     ignoreAnnotated: ['Composable']
   FunctionParameterNaming:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     parameterPattern: '[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
     ignoreOverridden: true
@@ -439,31 +439,31 @@ naming:
     excludes: ['**/test/**']
   ObjectPropertyNaming:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     constantPattern: '[A-Za-z][_A-Za-z0-9]*'
     propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
     privatePropertyPattern: '(_)?[A-Za-z][_A-Za-z0-9]*'
   PackageNaming:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     packagePattern: '[a-z]+(\.[a-z][A-Za-z0-9]*)*'
   TopLevelPropertyNaming:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     constantPattern: '[A-Z][_A-Z0-9]*'
     propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
     privatePropertyPattern: '_?[A-Za-z][_A-Za-z0-9]*'
   VariableMaxLength:
     active: false
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     maximumVariableNameLength: 64
   VariableMinLength:
     active: false
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     minimumVariableNameLength: 1
   VariableNaming:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     variablePattern: '[a-z][A-Za-z0-9]*'
     privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
@@ -475,10 +475,10 @@ performance:
     active: true
   ForEachOnRange:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
   SpreadOperator:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
   UnnecessaryTemporaryInstantiation:
     active: true
 
@@ -615,7 +615,7 @@ style:
     maxJumpCount: 1
   MagicNumber:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     ignoreNumbers: ['-1', '0', '1', '2']
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: false
@@ -745,5 +745,5 @@ style:
     active: true
   WildcardImport:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/componentTest/**']
     excludeImports: ['java.util.*', 'kotlinx.android.synthetic.*']
