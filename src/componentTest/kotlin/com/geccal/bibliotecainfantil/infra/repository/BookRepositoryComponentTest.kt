@@ -12,14 +12,12 @@ import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
 @ExperimentalCoroutinesApi
-@Tag("component")
-class BookRepositoryTestIT : IntegrationTest() {
+class BookRepositoryComponentTest : IntegrationTest() {
 
     private val subject = BookVertexRepository(
         connection

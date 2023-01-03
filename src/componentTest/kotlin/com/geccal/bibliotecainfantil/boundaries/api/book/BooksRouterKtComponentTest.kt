@@ -24,13 +24,11 @@ import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
-@Tag("component")
-class BooksRouterKtTest {
+class BooksRouterKtComponentTest {
     private val createBookUseCase: CreateBookUseCase = mockk()
     private val listBookUseCase: ListBookUseCase = mockk()
 
