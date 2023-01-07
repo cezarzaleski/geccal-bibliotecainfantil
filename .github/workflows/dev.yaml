@@ -71,8 +71,12 @@ jobs:
           java-version: 17
           distribution: 'adopt'
           cache: gradle
+          MYSQL_DATABASE: db
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+          MYSQL_HOST: mysql
       - name: Run componentTest with gradle
-        run: MYSQL_USERNAME=user  MYSQL_PASSWORD=password MYSQL_DATABASE=db MYSQL_HOST=localhost ./gradlew componentTest
+        run: ./gradlew componentTest
 
 #  componentTest:
 #    name: Component Test
