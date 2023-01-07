@@ -46,9 +46,9 @@ jobs:
         image: bitnami/mysql:8.0
         env:
           MYSQL_DATABASE: biblioteca-infantil
-          MYSQL_USER: root
+          MYSQL_USER: user
           MYSQL_PASSWORD: 123456
-          MYSQL_ROOT_PASSWORD: 123456
+          MYSQL_user_PASSWORD: 123456
           MYSQL_AUTHENTICATION_PLUGIN: 123456
         options: >-
           --health-cmd "mysqladmin ping"
@@ -60,7 +60,7 @@ jobs:
       - uses: joshuaavalon/flyway-action@v3.0.0
         with:
           url: jdbc:mysql://mysql:3306/biblioteca-infantil
-          user: root
+          user: user
           password: 123456
           locations: filesystem:./src/main/resources/db/migration
       - run: echo 'testing'
