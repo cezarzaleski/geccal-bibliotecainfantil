@@ -1,6 +1,6 @@
 package com.geccal.bibliotecainfantil.infra.repository
 
-import com.geccal.bibliotecainfantil.IntegrationTest
+import com.geccal.bibliotecainfantil.IntegrationDatabaseTest
 import com.geccal.bibliotecainfantil.builder.BookBuilder
 import com.geccal.bibliotecainfantil.core.domain.entity.BookID
 import com.geccal.bibliotecainfantil.core.domain.exception.NotFoundException
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
 @ExperimentalCoroutinesApi
-class BookRepositoryComponentTest : IntegrationTest() {
+class BookRepositoryComponentTest : IntegrationDatabaseTest() {
 
     private val subject = BookVertexRepository(
         connection
