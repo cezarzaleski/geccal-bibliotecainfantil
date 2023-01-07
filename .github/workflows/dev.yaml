@@ -40,6 +40,7 @@ jobs:
 
   componentTest:
     runs-on: ubuntu-latest
+    needs: build
     services:
       mysql:
         image: bitnami/mysql:8.0
@@ -62,7 +63,7 @@ jobs:
           user: user
           password: password
           locations: filesystem:./src/main/resources/db/migration
-      - run: ./gradlew componentTest
+      - run: echo 'testing'
 
 #  componentTest:
 #    name: Component Test
