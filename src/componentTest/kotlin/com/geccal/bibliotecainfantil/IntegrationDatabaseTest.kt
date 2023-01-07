@@ -18,7 +18,6 @@ open class IntegrationDatabaseTest {
         println(EnvironmentConfiguration.getString("database.config.mysql.password"))
         println("database")
         println(EnvironmentConfiguration.getString("database.config.mysql.database"))
-
     }
 
     val port = EnvironmentConfiguration.getInt("database.config.mysql.port")
