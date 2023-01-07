@@ -48,7 +48,7 @@ jobs:
           MYSQL_DATABASE: biblioteca-infantil
           MYSQL_USER: user
           MYSQL_PASSWORD: 123456
-          MYSQL_user_PASSWORD: 123456
+          MYSQL_ROOT_PASSWORD: 123456
           MYSQL_AUTHENTICATION_PLUGIN: 123456
         options: >-
           --health-cmd "mysqladmin ping"
