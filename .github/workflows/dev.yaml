@@ -41,8 +41,8 @@ jobs:
   componentTest:
     runs-on: ubuntu-latest
     services:
-      postgres:
-        image: postgres
+      mysql:
+        image: bitnami/mysql:8.0
         env:
           MYSQL_DATABASE: db
           MYSQL_USER: user
