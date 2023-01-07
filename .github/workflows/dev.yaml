@@ -56,6 +56,13 @@ jobs:
           --health-timeout 10s
           --health-retries 10
     steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'adopt'
+          cache: gradle
       - uses: actions/checkout@v2
       - uses: joshuaavalon/flyway-action@v3.0.0
         with:
@@ -64,19 +71,15 @@ jobs:
           password: password
           locations: filesystem:./src/main/resources/db/migration
       - run: echo 'testing'
-      - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/cache@v2
         with:
-          java-version: 17
-          distribution: 'adopt'
           cache: gradle
           MYSQL_DATABASE: db
           MYSQL_USER: user
           MYSQL_PASSWORD: password
           MYSQL_HOST: mysql
       - name: Run componentTest with gradle
-        run: MYSQL_USERNAME=user  MYSQL_PASSWORD=password MYSQL_DATABASE=db MYSQL_HOST=mysql ./gradlew :componentTest
+        run: ./gradlew componentTest
 
 #  componentTest:
 #    name: Component Test
