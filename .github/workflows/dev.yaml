@@ -56,12 +56,12 @@ jobs:
           --health-timeout 10s
           --health-retries 10
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: joshuaavalon/flyway-action@v3.0.0
         with:
-          url: jdbc:mysql://mysql:3306/db
-          user: user
-          password: password
+          url: jdbc:mysql://mysql:3306/biblioteca-infantil
+          user: root
+          password: 123456
           locations: filesystem:./src/main/resources/db/migration
       - run: echo 'testing'
       - uses: actions/checkout@v3
