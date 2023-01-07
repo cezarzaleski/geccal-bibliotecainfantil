@@ -76,7 +76,7 @@ jobs:
           MYSQL_PASSWORD: password
           MYSQL_HOST: mysql
       - name: Run componentTest with gradle
-        run: ./gradlew componentTest
+        run: MYSQL_USERNAME=user  MYSQL_PASSWORD=password MYSQL_DATABASE=db MYSQL_HOST=mysql ./gradlew :componentTest
 
 #  componentTest:
 #    name: Component Test
