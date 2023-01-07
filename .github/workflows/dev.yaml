@@ -62,7 +62,7 @@ jobs:
           user: user
           password: password
           locations: filesystem:./src/main/resources/db/migration
-      - run: echo 'testing'
+      - run: ./gradlew componentTest
 
 #  componentTest:
 #    name: Component Test
