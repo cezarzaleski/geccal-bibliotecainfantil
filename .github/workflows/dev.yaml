@@ -38,7 +38,7 @@ jobs:
         run: ./gradlew test
 
 
-  test:
+  componentTest:
     runs-on: ubuntu-latest
     services:
       postgres:
