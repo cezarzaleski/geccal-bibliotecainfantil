@@ -77,7 +77,7 @@ jobs:
           MYSQL_DATABASE: db
           MYSQL_USER: user
           MYSQL_PASSWORD: password
-          MYSQL_HOST: mysql
+          MYSQL_HOST: localhost
           MYSQL_PORT: 3306
 
 #  componentTest:
