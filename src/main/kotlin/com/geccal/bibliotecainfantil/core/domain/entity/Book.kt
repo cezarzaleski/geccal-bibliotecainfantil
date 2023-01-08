@@ -10,17 +10,18 @@ import com.geccal.bibliotecainfantil.core.domain.vo.Origin
 import com.geccal.bibliotecainfantil.core.domain.vo.Publisher
 import com.geccal.bibliotecainfantil.core.domain.vo.StatusBook
 import java.time.LocalDateTime
+
 @Suppress("LongParameterList")
 class Book private constructor(
     override val id: BookID,
-    val name: String,
+    var name: String,
     val exemplary: Int,
     val status: StatusBook,
-    val edition: String,
-    val year: Int,
-    val authors: MutableList<Author>,
-    val publisher: Publisher,
-    val origin: Origin,
+    var edition: String,
+    var year: Int,
+    var authors: MutableList<Author>,
+    var publisher: Publisher,
+    var origin: Origin,
     val createdAt: LocalDateTime,
     var updatedAt: LocalDateTime,
     var deletedAt: LocalDateTime? = null
@@ -39,6 +40,7 @@ class Book private constructor(
             val now = LocalDateTime.now()
             val notification = NotificationHandler.create()
             val origin = notification.validate { Origin.create(origin) } ?: Origin.UNKNOWN
+            val publisher = notification.validate { Publisher.create(publisher) } ?: Publisher.from("Invalid")
             val authors = authors.map { Author.create(it) }.toMutableList()
 
             val book = Book(
@@ -49,7 +51,7 @@ class Book private constructor(
                 edition = edition,
                 year = year,
                 authors = authors,
-                publisher = Publisher.create(publisher),
+                publisher = publisher,
                 origin = origin,
                 createdAt = now,
                 updatedAt = now,
@@ -103,5 +105,30 @@ class Book private constructor(
 
     override fun validate(handler: ValidationHandler) {
         BookValidate(this, handler).validate()
+    }
+
+    fun update(
+        name: String,
+        edition: String,
+        year: Int,
+        authors: List<String>,
+        origin: String,
+        publisher: String,
+        updatedAt: LocalDateTime = LocalDateTime.now()
+    ): Book {
+        val notification = NotificationHandler.create()
+        val origin = notification.validate { Origin.create(origin) } ?: Origin.UNKNOWN
+        val authors = authors.map { Author.create(it) }.toMutableList()
+        val publisher = notification.validate { Publisher.create(publisher) } ?: Publisher.from("Invalid")
+
+        this.name = name
+        this.edition = edition
+        this.year = year
+        this.authors = authors
+        this.publisher = publisher
+        this.origin = origin
+        this.updatedAt = updatedAt
+        this.selfValidate(notification)
+        return this
     }
 }
