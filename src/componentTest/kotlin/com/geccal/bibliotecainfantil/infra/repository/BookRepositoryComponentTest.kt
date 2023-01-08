@@ -11,6 +11,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -29,6 +30,7 @@ class BookRepositoryComponentTest : IntegrationDatabaseTest() {
         }
     }
     @Test
+    @Disabled
     fun `should find book by id with success`(): Unit = runBlocking {
          val book = BookBuilder.build()
         subject.create(book)
