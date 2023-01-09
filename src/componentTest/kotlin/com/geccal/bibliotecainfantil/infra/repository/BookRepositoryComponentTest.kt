@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import java.time.LocalDateTime
 
 @ExtendWith(MockKExtension::class)
 @ExperimentalCoroutinesApi
@@ -91,5 +92,45 @@ class BookRepositoryComponentTest : IntegrationDatabaseTest() {
         assertThat(result.perPage).isEqualTo(1)
         assertThat(result.total).isEqualTo(2L)
         assertThat(result.items.first().id.value).isEqualTo(bookSecond.id.value)
+    }
+
+    @Test
+    fun `should update a book with success`(): Unit = runBlocking {
+        val book = BookBuilder.build()
+        val nameExpected = "O Céu e o Inferno update"
+        val editionExpected = "2ª"
+        val yearExpected = 2023
+        val authorsExpected = mutableListOf("AuthorFakeUpdate")
+        val publisherExpected = "Boa Nova"
+        val originExpected = "CONFECTION"
+        val updatedAtExpected = LocalDateTime.now()
+        subject.create(book)
+        book.update(
+            name = nameExpected,
+            edition = editionExpected,
+            year = yearExpected,
+            authors = authorsExpected,
+            origin = originExpected,
+            publisher = publisherExpected,
+            updatedAt = updatedAtExpected
+        )
+
+        subject.update(book)
+
+        val result = subject.findById(book.id)
+
+        assertThat(result).isNotNull
+        assertThat(result.id.value).isEqualTo(book.id.value)
+        assertThat(result.name).isEqualTo(book.name)
+        assertThat(result.exemplary).isEqualTo(book.exemplary)
+        assertThat(result.status).isEqualTo(book.status)
+        assertThat(result.edition).isEqualTo(book.edition)
+        assertThat(result.year).isEqualTo(book.year)
+        assertThat(result.authors).isEqualTo(book.authors)
+        assertThat(result.publisher).isEqualTo(book.publisher)
+        assertThat(result.origin).isEqualTo(book.origin)
+        assertThat(result.createdAt).isEqualTo(book.createdAt)
+        assertThat(result.updatedAt).isEqualTo(book.updatedAt)
+        assertThat(result.deletedAt).isEqualTo(book.deletedAt)
     }
 }
