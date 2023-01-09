@@ -20,26 +20,12 @@ class BookVertexRepository(
 ) : BookRepository {
 
     override suspend fun create(book: Book): Book {
-        val params = mapOf(
-            "id" to book.id.value,
-            "name" to book.name,
-            "exemplary" to book.exemplary,
-            "status" to book.status,
-            "edition" to book.edition,
-            "year" to book.year,
-            "publisher" to book.publisher.value,
-            "origin" to book.origin.name,
-            "authors" to book.authors.map { it.value }.toJson(),
-            "createdAt" to book.createdAt,
-            "updatedAt" to book.updatedAt,
-            "deletedAt" to book.deletedAt,
-        )
         connection.persist(
-            "insert into books (id, name, exemplary, status, edition, year, publisher, origin, authors, " +
+            "INSERT INTO books (id, name, exemplary, status, edition, year, publisher, origin, authors, " +
                     "createdAt, updatedAt, deletedAt) " +
                     "values (#{id}, #{name}, #{exemplary}, #{status}, #{edition}, #{year}, #{publisher}, #{origin}, " +
                     "#{authors}, #{createdAt}, #{updatedAt}, #{deletedAt})",
-            params = params
+            params = book.toParams()
         )
         return book
     }
@@ -80,6 +66,26 @@ class BookVertexRepository(
         )
     }
 
+    override suspend fun update(book: Book): Book {
+        connection.persist(
+            "UPDATE books " +
+                    "SET name = #{name}, " +
+                    "exemplary = #{exemplary}, " +
+                    "status = #{status}, " +
+                    "edition = #{edition}, " +
+                    "year = #{year}, " +
+                    "publisher = #{publisher}, " +
+                    "origin = #{origin}, " +
+                    "authors = #{authors}, " +
+                    "createdAt = #{createdAt}, " +
+                    "updatedAt = #{updatedAt}, " +
+                    "deletedAt = #{deletedAt} " +
+                    "WHERE id = #{id}",
+            params = book.toParams()
+        )
+        return book
+    }
+
     private fun Row.toBook(): Book {
         return Book.from(
             id = BookID.from(getString("id")),
@@ -94,6 +100,23 @@ class BookVertexRepository(
             updatedAt = getLocalDateTime("updatedAt"),
             deletedAt = getLocalDateTime("deletedAt"),
             authors = (getJson("authors") as Iterable<*>).map { Author.create(it as String) }.toMutableList(),
+        )
+    }
+
+    private fun Book.toParams(): Map<String, Any?> {
+        return mapOf(
+            "id" to this.id.value,
+            "name" to this.name,
+            "exemplary" to this.exemplary,
+            "status" to this.status,
+            "edition" to this.edition,
+            "year" to this.year,
+            "publisher" to this.publisher.value,
+            "origin" to this.origin.name,
+            "authors" to this.authors.map { it.value }.toJson(),
+            "createdAt" to this.createdAt,
+            "updatedAt" to this.updatedAt,
+            "deletedAt" to this.deletedAt,
         )
     }
 }

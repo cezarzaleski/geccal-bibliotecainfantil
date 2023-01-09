@@ -10,4 +10,5 @@ interface BookRepository {
     suspend fun create(book: Book): Book
     suspend fun findById(id: BookID): Book
     suspend fun findAll(query: SearchQuery): Pagination<Book>
+    suspend fun update(book: Book): Book
 }
