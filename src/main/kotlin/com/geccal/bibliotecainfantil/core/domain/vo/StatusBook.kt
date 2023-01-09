@@ -27,11 +27,14 @@ enum class StatusBook {
         }
 
         private fun validate(value: String, validationHandler: ValidationHandler) {
-            if (value.isEmpty()) validationHandler.append(CustomError("status: Is empty"))
-            runCatching {
-                StatusBook.valueOf(value)
-            }.onFailure {
-                validationHandler.append(CustomError("status: Is invalid"))
+            if (value.isEmpty()) {
+                validationHandler.append(CustomError("status: Is empty"))
+            } else {
+                runCatching {
+                    StatusBook.valueOf(value)
+                }.onFailure {
+                    validationHandler.append(CustomError("status: Is invalid"))
+                }
             }
         }
     }
