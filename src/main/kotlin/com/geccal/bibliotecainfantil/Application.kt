@@ -30,7 +30,7 @@ fun main() {
         host = "0.0.0.0",
         module = {
             bibliotecaInfantil {
-                booksRouter(Usecases.createBookUseCase, Usecases.listBookUseCase)
+                booksRouter(Usecases.createBookUseCase, Usecases.listBookUseCase, Usecases.updateBookUseCase)
                 configureRouting()
             }
         })
