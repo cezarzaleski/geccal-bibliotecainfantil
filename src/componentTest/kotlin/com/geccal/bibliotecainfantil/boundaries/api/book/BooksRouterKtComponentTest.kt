@@ -84,7 +84,7 @@ class BooksRouterKtComponentTest {
     fun `should update a book with success`(): Unit = runBlocking {
         val client = application.client
         val bookID = BookID.unique().value
-        val response = client.put("/books/${bookID}") {
+        val response = client.put("/books/$bookID") {
             contentType(ContentType.Application.Json)
             setBody(CreateBookRequestBuilder.build().toJson())
         }
