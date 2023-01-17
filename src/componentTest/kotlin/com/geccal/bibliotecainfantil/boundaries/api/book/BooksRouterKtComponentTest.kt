@@ -7,11 +7,14 @@ import com.geccal.bibliotecainfantil.core.application.book.create.CreateBookOutp
 import com.geccal.bibliotecainfantil.core.application.book.create.CreateBookUseCase
 import com.geccal.bibliotecainfantil.core.application.book.retrieve.list.BookListOutput
 import com.geccal.bibliotecainfantil.core.application.book.retrieve.list.ListBookUseCase
+import com.geccal.bibliotecainfantil.core.application.book.update.UpdateBookUseCase
+import com.geccal.bibliotecainfantil.core.domain.entity.BookID
 import com.geccal.bibliotecainfantil.core.domain.pagination.Pagination
 import com.geccal.bibliotecainfantil.infra.extension.toJson
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
@@ -31,9 +34,10 @@ import org.junit.jupiter.api.extension.ExtendWith
 class BooksRouterKtComponentTest {
     private val createBookUseCase: CreateBookUseCase = mockk()
     private val listBookUseCase: ListBookUseCase = mockk()
+    private val updateBookUseCase: UpdateBookUseCase = mockk(relaxed = true)
 
     private val application = TestApplication {
-        application { bibliotecaInfantil { booksRouter(createBookUseCase, listBookUseCase) } }
+        application { bibliotecaInfantil { booksRouter(createBookUseCase, listBookUseCase, updateBookUseCase) } }
     }
 
     @Test
@@ -74,5 +78,19 @@ class BooksRouterKtComponentTest {
 
         coVerify { listBookUseCase.execute(any()) }
         assertThat(expected.toJson()).isEqualTo(response.bodyAsText())
+    }
+
+    @Test
+    fun `should update a book with success`(): Unit = runBlocking {
+        val client = application.client
+        val bookID = BookID.unique().value
+        val response = client.put("/books/${bookID}") {
+            contentType(ContentType.Application.Json)
+            setBody(CreateBookRequestBuilder.build().toJson())
+        }
+
+        assertThat(HttpStatusCode.NoContent).isEqualTo(response.status)
+
+        coVerify { updateBookUseCase.execute(any()) }
     }
 }
