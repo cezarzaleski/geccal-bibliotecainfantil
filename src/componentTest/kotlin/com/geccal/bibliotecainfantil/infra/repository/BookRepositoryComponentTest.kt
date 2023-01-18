@@ -125,5 +125,14 @@ class BookRepositoryComponentTest : IntegrationDatabaseTest() {
         log.debug("find book")
         log.debug(result.toJson())
         assertThat(result).isNotNull
+        assertThat(result.id.value).isEqualTo(book.id.value)
+        assertThat(result.name).isEqualTo(book.name)
+        assertThat(result.exemplary).isEqualTo(book.exemplary)
+        assertThat(result.status).isEqualTo(book.status)
+        assertThat(result.edition).isEqualTo(book.edition)
+        assertThat(result.year).isEqualTo(book.year)
+        assertThat(result.authors).isEqualTo(book.authors)
+        assertThat(result.publisher).isEqualTo(book.publisher)
+        assertThat(result.origin).isEqualTo(book.origin)
     }
 }
