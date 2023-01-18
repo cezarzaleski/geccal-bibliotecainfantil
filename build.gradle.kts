@@ -63,7 +63,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-jackson:$ktor_version")
     implementation("io.ktor:ktor-server-host-common-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-status-pages-jvm:$ktor_version")
-    implementation("com.fasterxml.jackson.datatype:$jackson_datatype_jsr")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson_datatype_jsr")
 
     detekt("io.gitlab.arturbosch.detekt:detekt-cli:$detekt_version")
     detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$detekt_version")
