@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 
 fun <T : Any> T.toJson(): String = JsonMapper.mapper.writeValueAsString(this)
 
@@ -27,6 +28,7 @@ object JsonMapper {
         configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
         configure(SerializationFeature.INDENT_OUTPUT, false)
         configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
+        registerModule(JavaTimeModule())
         setSerializationInclusion(JsonInclude.Include.ALWAYS)
     }
 }
