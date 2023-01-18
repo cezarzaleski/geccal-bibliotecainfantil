@@ -10,6 +10,7 @@ val flyway_version: String by project
 val testcontainers_version: String by project
 val mysql_version: String by project
 val flyway_mysql_version: String by project
+val jackson_datatype_jsr: String by project
 
 plugins {
     application
@@ -62,6 +63,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-jackson:$ktor_version")
     implementation("io.ktor:ktor-server-host-common-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-status-pages-jvm:$ktor_version")
+    implementation("com.fasterxml.jackson.datatype:$jackson_datatype_jsr")
 
     detekt("io.gitlab.arturbosch.detekt:detekt-cli:$detekt_version")
     detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$detekt_version")
