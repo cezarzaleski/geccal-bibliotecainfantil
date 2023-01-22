@@ -14,6 +14,7 @@ import com.geccal.bibliotecainfantil.infra.database.Connection
 import com.geccal.bibliotecainfantil.infra.extension.toJson
 import io.vertx.sqlclient.Row
 import io.vertx.sqlclient.RowSet
+import java.time.temporal.ChronoUnit
 
 class BookVertexRepository(
     private val connection: Connection
@@ -96,9 +97,9 @@ class BookVertexRepository(
             year = getInteger("year"),
             publisher = Publisher.from(getString("publisher")),
             origin = Origin.valueOf(getString("origin")),
-            createdAt = getLocalDateTime("createdAt"),
-            updatedAt = getLocalDateTime("updatedAt"),
-            deletedAt = getLocalDateTime("deletedAt"),
+            createdAt = getLocalDateTime("createdAt").truncatedTo(ChronoUnit.MICROS),
+            updatedAt = getLocalDateTime("updatedAt").truncatedTo(ChronoUnit.MICROS),
+            deletedAt = getLocalDateTime("deletedAt").truncatedTo(ChronoUnit.MICROS),
             authors = (getJson("authors") as Iterable<*>).map { Author.create(it as String) }.toMutableList(),
         )
     }
