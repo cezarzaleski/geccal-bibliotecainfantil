@@ -7,6 +7,7 @@ import com.geccal.bibliotecainfantil.core.domain.vo.Origin
 import com.geccal.bibliotecainfantil.core.domain.vo.Publisher
 import com.geccal.bibliotecainfantil.core.domain.vo.StatusBook
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 object BookBuilder {
 
@@ -20,8 +21,8 @@ object BookBuilder {
         authors: MutableList<Author> = mutableListOf(Author.create("AuthorFake")),
         publisher: Publisher = Publisher.from("FEB"),
         origin: Origin = Origin.ACQUISITION,
-        createdAt: LocalDateTime = LocalDateTime.now(),
-        updatedAt: LocalDateTime = LocalDateTime.now(),
+        createdAt: LocalDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.MICROS),
+        updatedAt: LocalDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.MICROS),
         deletedAt: LocalDateTime? = null
     ) = Book.from(
         id = id,
