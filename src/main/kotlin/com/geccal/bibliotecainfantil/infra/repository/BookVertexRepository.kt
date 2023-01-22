@@ -99,7 +99,7 @@ class BookVertexRepository(
             origin = Origin.valueOf(getString("origin")),
             createdAt = getLocalDateTime("createdAt").truncatedTo(ChronoUnit.MICROS),
             updatedAt = getLocalDateTime("updatedAt").truncatedTo(ChronoUnit.MICROS),
-            deletedAt = getLocalDateTime("deletedAt").truncatedTo(ChronoUnit.MICROS),
+            deletedAt = getLocalDateTime("deletedAt")?.truncatedTo(ChronoUnit.MICROS),
             authors = (getJson("authors") as Iterable<*>).map { Author.create(it as String) }.toMutableList(),
         )
     }
