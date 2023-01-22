@@ -10,6 +10,7 @@ import com.geccal.bibliotecainfantil.core.domain.vo.Origin
 import com.geccal.bibliotecainfantil.core.domain.vo.Publisher
 import com.geccal.bibliotecainfantil.core.domain.vo.StatusBook
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 @Suppress("LongParameterList")
 class Book private constructor(
@@ -37,7 +38,7 @@ class Book private constructor(
             origin: String,
             publisher: String
         ): Book {
-            val now = LocalDateTime.now()
+            val now = LocalDateTime.now().truncatedTo(ChronoUnit.MICROS)
             val notification = NotificationHandler.create()
             val origin = notification.validate { Origin.create(origin) } ?: Origin.UNKNOWN
             val publisher = notification.validate { Publisher.create(publisher) } ?: Publisher.from("Invalid")
