@@ -134,5 +134,8 @@ class BookRepositoryComponentTest : IntegrationDatabaseTest() {
         assertThat(result.authors).isEqualTo(book.authors)
         assertThat(result.publisher).isEqualTo(book.publisher)
         assertThat(result.origin).isEqualTo(book.origin)
+        assertThat(result.createdAt).isEqualTo(book.createdAt)
+        assertThat(result.updatedAt).isEqualTo(book.updatedAt)
+        assertThat(result.deletedAt).isEqualTo(book.deletedAt)
     }
 }
