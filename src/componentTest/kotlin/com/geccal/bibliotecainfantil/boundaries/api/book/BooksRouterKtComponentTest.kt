@@ -101,7 +101,7 @@ class BooksRouterKtComponentTest {
     }
 
     @Test
-    fun `should get a a book with success`(): Unit = runBlocking {
+    fun `should get a book with success`(): Unit = runBlocking {
         val client = application.client
         val bookID = BookID.unique().value
         val response = client.get("/books/$bookID") {
