@@ -12,7 +12,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -35,7 +34,6 @@ class BookRepositoryComponentTest : IntegrationDatabaseTest() {
         }
     }
     @Test
-    @Disabled
     fun `should find book by id with success`(): Unit = runBlocking {
          val book = BookBuilder.build()
         subject.create(book)
@@ -134,7 +132,8 @@ class BookRepositoryComponentTest : IntegrationDatabaseTest() {
         assertThat(result.status).isEqualTo(book.status)
         assertThat(result.edition).isEqualTo(book.edition)
         assertThat(result.year).isEqualTo(book.year)
-        assertThat(result.publisher.value).isEqualTo(book.publisher.value)
+        assertThat(result.publisher.value).isEqualTo(book.publisher)
+        assertThat(result.authors).isEqualTo(book.authors)
         assertThat(result.origin).isEqualTo(book.origin)
         assertThat(result.createdAt).isEqualTo(book.createdAt)
         assertThat(result.updatedAt).isEqualTo(updatedAtExpected)
