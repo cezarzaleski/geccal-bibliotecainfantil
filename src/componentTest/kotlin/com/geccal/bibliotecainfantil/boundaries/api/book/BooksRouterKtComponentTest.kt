@@ -5,6 +5,7 @@ import com.geccal.bibliotecainfantil.builder.BookBuilder
 import com.geccal.bibliotecainfantil.builder.CreateBookRequestBuilder
 import com.geccal.bibliotecainfantil.core.application.book.create.CreateBookOutput
 import com.geccal.bibliotecainfantil.core.application.book.create.CreateBookUseCase
+import com.geccal.bibliotecainfantil.core.application.book.retrieve.get.GetBookUseCase
 import com.geccal.bibliotecainfantil.core.application.book.retrieve.list.BookListOutput
 import com.geccal.bibliotecainfantil.core.application.book.retrieve.list.ListBookUseCase
 import com.geccal.bibliotecainfantil.core.application.book.update.UpdateBookUseCase
@@ -35,9 +36,14 @@ class BooksRouterKtComponentTest {
     private val createBookUseCase: CreateBookUseCase = mockk()
     private val listBookUseCase: ListBookUseCase = mockk()
     private val updateBookUseCase: UpdateBookUseCase = mockk(relaxed = true)
+    private val getBookUseCase: GetBookUseCase = mockk(relaxed = true)
 
     private val application = TestApplication {
-        application { bibliotecaInfantil { booksRouter(createBookUseCase, listBookUseCase, updateBookUseCase) } }
+        application {
+            bibliotecaInfantil {
+                booksRouter(createBookUseCase, listBookUseCase, updateBookUseCase, getBookUseCase)
+            }
+        }
     }
 
     @Test
@@ -92,5 +98,18 @@ class BooksRouterKtComponentTest {
         assertThat(HttpStatusCode.NoContent).isEqualTo(response.status)
 
         coVerify { updateBookUseCase.execute(any()) }
+    }
+
+    @Test
+    fun `should get a a book with success`(): Unit = runBlocking {
+        val client = application.client
+        val bookID = BookID.unique().value
+        val response = client.get("/books/$bookID") {
+            contentType(ContentType.Application.Json)
+        }
+
+        assertThat(HttpStatusCode.OK).isEqualTo(response.status)
+
+        coVerify { getBookUseCase.execute(any()) }
     }
 }
