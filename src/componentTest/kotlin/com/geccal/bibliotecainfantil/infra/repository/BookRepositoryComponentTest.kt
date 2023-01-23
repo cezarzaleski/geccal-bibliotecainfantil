@@ -18,6 +18,7 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 @ExtendWith(MockKExtension::class)
 @ExperimentalCoroutinesApi
@@ -106,7 +107,7 @@ class BookRepositoryComponentTest : IntegrationDatabaseTest() {
         val authorsExpected = mutableListOf("AuthorFakeUpdate")
         val publisherExpected = "Boa Nova"
         val originExpected = "CONFECTION"
-        val updatedAtExpected = LocalDateTime.now()
+        val updatedAtExpected = LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.MICROS)
         subject.create(book)
         book.update(
             name = nameExpected,
@@ -136,7 +137,7 @@ class BookRepositoryComponentTest : IntegrationDatabaseTest() {
         assertThat(result.publisher.value).isEqualTo(book.publisher.value)
         assertThat(result.origin).isEqualTo(book.origin)
         assertThat(result.createdAt).isEqualTo(book.createdAt)
-        assertThat(result.updatedAt).isEqualTo(book.updatedAt)
+        assertThat(result.updatedAt).isEqualTo(updatedAtExpected)
         assertThat(result.deletedAt).isEqualTo(book.deletedAt)
     }
 }
