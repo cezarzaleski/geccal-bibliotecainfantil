@@ -4,6 +4,7 @@ import com.geccal.bibliotecainfantil.boundaries.api.book.model.CreateBookRequest
 import com.geccal.bibliotecainfantil.boundaries.api.book.model.UpdateBookRequest
 import com.geccal.bibliotecainfantil.boundaries.api.model.extension.toSearchQuery
 import com.geccal.bibliotecainfantil.core.application.book.create.CreateBookUseCase
+import com.geccal.bibliotecainfantil.core.application.book.retrieve.get.GetBookUseCase
 import com.geccal.bibliotecainfantil.core.application.book.retrieve.list.ListBookUseCase
 import com.geccal.bibliotecainfantil.core.application.book.update.UpdateBookUseCase
 import io.ktor.http.HttpStatusCode
@@ -19,7 +20,8 @@ import io.ktor.server.routing.route
 fun Routing.booksRouter(
     createBookUseCase: CreateBookUseCase,
     listBookUseCase: ListBookUseCase,
-    updateBookUseCase: UpdateBookUseCase
+    updateBookUseCase: UpdateBookUseCase,
+    getBookUseCase: GetBookUseCase
 ) {
     route("/books") {
         post {
@@ -35,6 +37,13 @@ fun Routing.booksRouter(
             call.respond(
                 HttpStatusCode.OK,
                 listBookUseCase.execute(call.request.toSearchQuery())
+            )
+        }
+        get("/{id}") {
+            val id = call.parameters["id"].orEmpty()
+            call.respond(
+                HttpStatusCode.OK,
+                getBookUseCase.execute(id)
             )
         }
         put("/{id}") {
