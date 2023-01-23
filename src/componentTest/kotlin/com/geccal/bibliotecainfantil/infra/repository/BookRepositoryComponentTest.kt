@@ -6,7 +6,6 @@ import com.geccal.bibliotecainfantil.core.domain.entity.BookID
 import com.geccal.bibliotecainfantil.core.domain.exception.NotFoundException
 import com.geccal.bibliotecainfantil.core.domain.pagination.SearchQuery
 import com.geccal.bibliotecainfantil.core.domain.vo.Publisher
-import com.geccal.bibliotecainfantil.infra.extension.toJson
 import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -15,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
@@ -26,7 +24,6 @@ class BookRepositoryComponentTest : IntegrationDatabaseTest() {
     private val subject = BookVertexRepository(
         connection
     )
-    private val log = LoggerFactory.getLogger(BookRepositoryComponentTest::class.java)
     @BeforeEach
     fun reset() {
         runBlocking {
@@ -121,10 +118,6 @@ class BookRepositoryComponentTest : IntegrationDatabaseTest() {
 
         val result = subject.findById(book.id)
 
-        log.debug("find book")
-        log.debug(result.toJson())
-        log.debug("find book")
-        log.debug(book.toJson())
         assertThat(result).isNotNull
         assertThat(result.id.value).isEqualTo(book.id.value)
         assertThat(result.name).isEqualTo(nameExpected)
@@ -133,7 +126,7 @@ class BookRepositoryComponentTest : IntegrationDatabaseTest() {
         assertThat(result.edition).isEqualTo(editionExpected)
         assertThat(result.year).isEqualTo(yearExpected)
         assertThat(result.publisher.value).isEqualTo(publisherExpected)
-        assertThat(result.authors).isEqualTo(authorsExpected)
+        assertThat(result.authors.map { it.value }).isEqualTo(authorsExpected)
         assertThat(result.origin.name).isEqualTo(originExpected)
         assertThat(result.createdAt).isEqualTo(book.createdAt)
         assertThat(result.updatedAt).isEqualTo(updatedAtExpected)
