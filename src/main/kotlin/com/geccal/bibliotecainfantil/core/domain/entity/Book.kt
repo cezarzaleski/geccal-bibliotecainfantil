@@ -55,7 +55,7 @@ class Book private constructor(
                 publisher = publisher,
                 origin = origin,
                 createdAt = now,
-                updatedAt = now,
+                updatedAt = now
             )
             book.selfValidate(notification)
             return book
