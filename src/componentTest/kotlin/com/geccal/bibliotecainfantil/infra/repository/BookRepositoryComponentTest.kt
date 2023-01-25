@@ -5,6 +5,7 @@ import com.geccal.bibliotecainfantil.builder.BookBuilder
 import com.geccal.bibliotecainfantil.core.domain.entity.BookID
 import com.geccal.bibliotecainfantil.core.domain.exception.NotFoundException
 import com.geccal.bibliotecainfantil.core.domain.pagination.SearchQuery
+import com.geccal.bibliotecainfantil.core.domain.vo.Author
 import com.geccal.bibliotecainfantil.core.domain.vo.Publisher
 import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,15 +25,17 @@ class BookRepositoryComponentTest : IntegrationDatabaseTest() {
     private val subject = BookVertexRepository(
         connection
     )
+
     @BeforeEach
     fun reset() {
         runBlocking {
             cleanUp(listOf("books"))
         }
     }
+
     @Test
     fun `should find book by id with success`(): Unit = runBlocking {
-         val book = BookBuilder.build()
+        val book = BookBuilder.build()
         subject.create(book)
 
         val result = subject.findById(book.id)
@@ -131,5 +134,25 @@ class BookRepositoryComponentTest : IntegrationDatabaseTest() {
         assertThat(result.createdAt).isEqualTo(book.createdAt)
         assertThat(result.updatedAt).isEqualTo(updatedAtExpected)
         assertThat(result.deletedAt).isEqualTo(book.deletedAt)
+    }
+
+    @Test
+    fun `should findAll authors with pagination search by name with success`(): Unit = runBlocking {
+        val firstBook = BookBuilder.build(
+            name = "O Céu e o Inferno",
+            authors = mutableListOf(Author.create("Divaldo"), Author.create("Pereira"))
+        )
+        val secondBook = BookBuilder.build(
+            name = "A Bússola e o Leme",
+            authors = mutableListOf(Author.create("Maria"), Author.create("Pedro"))
+        )
+        subject.create(firstBook)
+        subject.create(secondBook)
+
+        val searchQuery = SearchQuery(0, 1, "maria", "author", "ASC")
+        val result = subject.findAllAuthors(searchQuery)
+
+        assertThat(result.total).isEqualTo(1L)
+        assertThat(result.items.first()).isEqualTo("Maria")
     }
 }
