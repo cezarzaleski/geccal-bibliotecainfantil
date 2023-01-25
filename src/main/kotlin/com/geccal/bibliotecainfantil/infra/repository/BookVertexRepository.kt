@@ -22,10 +22,10 @@ class BookVertexRepository(
 
     override suspend fun create(book: Book): Book {
         connection.persist(
-            "INSERT INTO books (id, name, exemplary, status, edition, year, publisher, origin, authors, " +
-                "createdAt, updatedAt, deletedAt) " +
-                "values (#{id}, #{name}, #{exemplary}, #{status}, #{edition}, #{year}, #{publisher}, #{origin}, " +
-                "#{authors}, #{createdAt}, #{updatedAt}, #{deletedAt})",
+            """INSERT INTO books (id, name, exemplary, status, edition, year, publisher, origin, authors, 
+                createdAt, updatedAt, deletedAt)
+                values (#{id}, #{name}, #{exemplary}, #{status}, #{edition}, #{year}, #{publisher}, #{origin},
+                #{authors}, #{createdAt}, #{updatedAt}, #{deletedAt})""",
             params = book.toParams()
         )
         return book
@@ -33,10 +33,10 @@ class BookVertexRepository(
 
     override suspend fun findById(id: BookID): Book {
         val bookDataList = connection.query<RowSet<Row>>(
-            "SELECT id, name, exemplary, status, edition, " +
-                "year, publisher, origin, authors, createdAt, updatedAt, deletedAt " +
-                "FROM books " +
-                "WHERE id = #{id}",
+            """SELECT id, name, exemplary, status, edition,
+                year, publisher, origin, authors, createdAt, updatedAt, deletedAt
+                FROM books
+                WHERE id = #{id}""",
             mapOf("id" to id.value)
         )
         if (bookDataList.size() == 0) throw NotFoundException.from("Book", id)
@@ -45,11 +45,10 @@ class BookVertexRepository(
 
     override suspend fun findAll(query: SearchQuery): Pagination<Book> {
         val (page, perPage, terms, sort, direction) = query
-
-        var statement = "SELECT id, name, exemplary, status, edition, " +
-            "year, publisher, origin, authors, createdAt, updatedAt, deletedAt " +
-            "FROM books " +
-            "WHERE 1=1 "
+        var statement = """SELECT id, name, exemplary, status, edition, 
+            year, publisher, origin, authors, createdAt, updatedAt, deletedAt
+            FROM books
+            WHERE 1=1 """
         if (terms.isNotEmpty()) {
             statement += "AND ((LOWER(name) LIKE #{terms}) OR (LOWER(publisher) LIKE #{terms})) "
         }
@@ -67,6 +66,38 @@ class BookVertexRepository(
             perPage = perPage,
             total = countResult.first().getLong("total"),
             items = bookDataList.map { it.toBook() }
+        )
+    }
+
+    override suspend fun findAllAuthors(query: SearchQuery): Pagination<String> {
+        val (page, perPage, terms, sort, direction) = query
+
+        var statement = """
+            SELECT DISTINCT author
+            from
+                books,
+                json_table(
+                        authors,
+                        "${'$'}[*]"
+                        columns (author varchar(50) PATH "${'$'}")
+                    ) a WHERE 1=1"""
+        if (terms.isNotEmpty()) {
+            statement += " AND LOWER(author) LIKE #{terms} "
+        }
+        val statementCount = "SELECT count(1) as total from ($statement) as query"
+        statement += "ORDER BY $sort $direction LIMIT $perPage OFFSET $page"
+
+        val params = mapOf(
+            "terms" to "%${terms.lowercase()}%"
+        )
+        val bookDataList = connection.query<RowSet<Row>>(statement, params)
+        val countResult = connection.query<RowSet<Row>>(statementCount, params)
+        if (bookDataList.size() == 0) return Pagination.empty(page, perPage)
+        return Pagination(
+            currentPage = page,
+            perPage = perPage,
+            total = countResult.first().getLong("total"),
+            items = bookDataList.map { it.getString("author") }
         )
     }
 
