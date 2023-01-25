@@ -23,19 +23,22 @@ class BookVertexRepository(
     override suspend fun create(book: Book): Book {
         connection.persist(
             "INSERT INTO books (id, name, exemplary, status, edition, year, publisher, origin, authors, " +
-                    "createdAt, updatedAt, deletedAt) " +
-                    "values (#{id}, #{name}, #{exemplary}, #{status}, #{edition}, #{year}, #{publisher}, #{origin}, " +
-                    "#{authors}, #{createdAt}, #{updatedAt}, #{deletedAt})",
+                "createdAt, updatedAt, deletedAt) " +
+                "values (#{id}, #{name}, #{exemplary}, #{status}, #{edition}, #{year}, #{publisher}, #{origin}, " +
+                "#{authors}, #{createdAt}, #{updatedAt}, #{deletedAt})",
             params = book.toParams()
         )
         return book
     }
 
     override suspend fun findById(id: BookID): Book {
-        val bookDataList = connection.query<RowSet<Row>>("SELECT id, name, exemplary, status, edition, " +
+        val bookDataList = connection.query<RowSet<Row>>(
+            "SELECT id, name, exemplary, status, edition, " +
                 "year, publisher, origin, authors, createdAt, updatedAt, deletedAt " +
                 "FROM books " +
-                "WHERE id = #{id}", mapOf("id" to id.value))
+                "WHERE id = #{id}",
+            mapOf("id" to id.value)
+        )
         if (bookDataList.size() == 0) throw NotFoundException.from("Book", id)
         return bookDataList.first().toBook()
     }
@@ -44,9 +47,9 @@ class BookVertexRepository(
         val (page, perPage, terms, sort, direction) = query
 
         var statement = "SELECT id, name, exemplary, status, edition, " +
-                "year, publisher, origin, authors, createdAt, updatedAt, deletedAt " +
-                "FROM books " +
-                "WHERE 1=1 "
+            "year, publisher, origin, authors, createdAt, updatedAt, deletedAt " +
+            "FROM books " +
+            "WHERE 1=1 "
         if (terms.isNotEmpty()) {
             statement += "AND ((LOWER(name) LIKE #{terms}) OR (LOWER(publisher) LIKE #{terms})) "
         }
@@ -70,18 +73,18 @@ class BookVertexRepository(
     override suspend fun update(book: Book): Book {
         connection.persist(
             "UPDATE books " +
-                    "SET name = #{name}, " +
-                    "exemplary = #{exemplary}, " +
-                    "status = #{status}, " +
-                    "edition = #{edition}, " +
-                    "year = #{year}, " +
-                    "publisher = #{publisher}, " +
-                    "origin = #{origin}, " +
-                    "authors = #{authors}, " +
-                    "createdAt = #{createdAt}, " +
-                    "updatedAt = #{updatedAt}, " +
-                    "deletedAt = #{deletedAt} " +
-                    "WHERE id = #{id}",
+                "SET name = #{name}, " +
+                "exemplary = #{exemplary}, " +
+                "status = #{status}, " +
+                "edition = #{edition}, " +
+                "year = #{year}, " +
+                "publisher = #{publisher}, " +
+                "origin = #{origin}, " +
+                "authors = #{authors}, " +
+                "createdAt = #{createdAt}, " +
+                "updatedAt = #{updatedAt}, " +
+                "deletedAt = #{deletedAt} " +
+                "WHERE id = #{id}",
             params = book.toParams()
         )
         return book
@@ -100,7 +103,7 @@ class BookVertexRepository(
             createdAt = getLocalDateTime("createdAt").truncatedTo(ChronoUnit.MICROS),
             updatedAt = getLocalDateTime("updatedAt").truncatedTo(ChronoUnit.MICROS),
             deletedAt = getLocalDateTime("deletedAt")?.truncatedTo(ChronoUnit.MICROS),
-            authors = (getJson("authors") as Iterable<*>).map { Author.create(it as String) }.toMutableList(),
+            authors = (getJson("authors") as Iterable<*>).map { Author.create(it as String) }.toMutableList()
         )
     }
 
@@ -117,7 +120,7 @@ class BookVertexRepository(
             "authors" to this.authors.map { it.value }.toJson(),
             "createdAt" to this.createdAt,
             "updatedAt" to this.updatedAt,
-            "deletedAt" to this.deletedAt,
+            "deletedAt" to this.deletedAt
         )
     }
 }
