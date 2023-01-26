@@ -5,8 +5,8 @@ import com.geccal.bibliotecainfantil.core.domain.pagination.SearchQuery
 import io.ktor.server.request.ApplicationRequest
 
 fun ApplicationRequest.toSearchQuery(
-    directionDefault: String,
-    sortDefault: String = Pagination.DEFAULT_SORT
+    sortDefault: String,
+    directionDefault: String = Pagination.DEFAULT_DIRECTION
 ): SearchQuery {
     val search = call.request.queryParameters["search"].orEmpty()
     val page = call.request.queryParameters["page"]?.toIntOrNull() ?: Pagination.DEFAULT_PAGE

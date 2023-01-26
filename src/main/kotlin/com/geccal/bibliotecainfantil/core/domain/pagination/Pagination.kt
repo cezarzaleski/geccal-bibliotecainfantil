@@ -15,7 +15,7 @@ data class Pagination<T>(
     companion object {
         const val DEFAULT_PAGE = 0
         const val DEFAULT_PER_PAGE = 30
-        const val DEFAULT_SORT = "ASC"
+        const val DEFAULT_DIRECTION = "ASC"
         fun <T> empty(currentPage: Int, perPage: Int) = Pagination<T>(currentPage, perPage, 0L, emptyList())
     }
 }
