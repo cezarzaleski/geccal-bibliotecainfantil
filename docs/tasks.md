@@ -1,0 +1,3 @@
+- configurar sonar no pipeline
+- refatorar repositório para utilizar uma abstração para construir lógica de paginação
+- criar teste para handler de tratamento de erros
