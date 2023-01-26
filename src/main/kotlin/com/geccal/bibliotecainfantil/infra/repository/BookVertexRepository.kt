@@ -101,21 +101,44 @@ class BookVertexRepository(
         )
     }
 
+    override suspend fun findAllPublishers(query: SearchQuery): Pagination<String> {
+        val (page, perPage, terms, sort, direction) = query
+
+        var statement = "SELECT DISTINCT publisher FROM books"
+        var params = emptyMap<String, Any>()
+        if (terms.isNotEmpty()) {
+            statement += " WHERE LOWER(publisher) LIKE #{terms}"
+            params = mapOf("terms" to "%${terms.lowercase()}%")
+        }
+        statement += " ORDER BY $sort $direction LIMIT $perPage OFFSET ${page * perPage}"
+        val statementCount = "SELECT count(1) as total from ($statement) as query"
+
+        val publishers = connection.query<RowSet<Row>>(statement, params)
+        val countResult = connection.query<RowSet<Row>>(statementCount, params)
+        if (publishers.size() == 0) return Pagination.empty(page, perPage)
+        return Pagination(
+            currentPage = page,
+            perPage = perPage,
+            total = countResult.first().getLong("total"),
+            items = publishers.map { it.getString("publisher") }
+        )
+    }
+
     override suspend fun update(book: Book): Book {
         connection.persist(
             "UPDATE books " +
-                "SET name = #{name}, " +
-                "exemplary = #{exemplary}, " +
-                "status = #{status}, " +
-                "edition = #{edition}, " +
-                "year = #{year}, " +
-                "publisher = #{publisher}, " +
-                "origin = #{origin}, " +
-                "authors = #{authors}, " +
-                "createdAt = #{createdAt}, " +
-                "updatedAt = #{updatedAt}, " +
-                "deletedAt = #{deletedAt} " +
-                "WHERE id = #{id}",
+                    "SET name = #{name}, " +
+                    "exemplary = #{exemplary}, " +
+                    "status = #{status}, " +
+                    "edition = #{edition}, " +
+                    "year = #{year}, " +
+                    "publisher = #{publisher}, " +
+                    "origin = #{origin}, " +
+                    "authors = #{authors}, " +
+                    "createdAt = #{createdAt}, " +
+                    "updatedAt = #{updatedAt}, " +
+                    "deletedAt = #{deletedAt} " +
+                    "WHERE id = #{id}",
             params = book.toParams()
         )
         return book
