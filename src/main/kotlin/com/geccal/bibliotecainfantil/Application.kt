@@ -2,6 +2,7 @@ package com.geccal.bibliotecainfantil
 
 import com.geccal.bibliotecainfantil.boundaries.api.book.authorsRouter
 import com.geccal.bibliotecainfantil.boundaries.api.book.booksRouter
+import com.geccal.bibliotecainfantil.boundaries.api.book.publishersRouter
 import com.geccal.bibliotecainfantil.boundaries.api.configuration.statusPages
 import com.geccal.bibliotecainfantil.boundaries.api.configureRouting
 import com.geccal.bibliotecainfantil.infra.configuration.Usecases
@@ -38,6 +39,7 @@ fun main() {
                     Usecases.getBookUseCase
                 )
                 authorsRouter(Usecases.listAuthorUseCase)
+                publishersRouter(Usecases.listPublisherUseCase)
                 configureRouting()
             }
         })
