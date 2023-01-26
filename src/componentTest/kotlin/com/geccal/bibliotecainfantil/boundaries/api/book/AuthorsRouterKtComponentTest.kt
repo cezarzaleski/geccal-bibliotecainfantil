@@ -43,7 +43,7 @@ class AuthorsRouterKtComponentTest {
             contentType(ContentType.Application.Json)
             parameter("page", expected.currentPage)
             parameter("perPage", expected.perPage)
-            parameter("sort", Pagination.DEFAULT_SORT)
+            parameter("sort", Pagination.DEFAULT_DIRECTION)
             parameter("direction", "author")
         }
 
