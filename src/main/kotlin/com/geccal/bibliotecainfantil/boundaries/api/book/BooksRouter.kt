@@ -36,7 +36,7 @@ fun Routing.booksRouter(
         get {
             call.respond(
                 HttpStatusCode.OK,
-                listBookUseCase.execute(call.request.toSearchQuery())
+                listBookUseCase.execute(call.request.toSearchQuery("name"))
             )
         }
         get("/{id}") {
