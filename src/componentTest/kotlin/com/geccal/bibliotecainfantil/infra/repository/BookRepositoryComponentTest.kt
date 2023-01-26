@@ -73,7 +73,7 @@ class BookRepositoryComponentTest : IntegrationDatabaseTest() {
         subject.create(bookFirst)
         subject.create(bookSecond)
 
-        val searchQuery = SearchQuery(0, 1, "inferno", "name", "ASC")
+        val searchQuery = SearchQuery(0, 1, "inferno", "name")
         val result = subject.findAll(searchQuery)
 
         assertThat(result.total).isEqualTo(1L)
@@ -149,10 +149,24 @@ class BookRepositoryComponentTest : IntegrationDatabaseTest() {
         subject.create(firstBook)
         subject.create(secondBook)
 
-        val searchQuery = SearchQuery(0, 1, "maria", "author", "ASC")
+        val searchQuery = SearchQuery(0, 1, "maria", "author")
         val result = subject.findAllAuthors(searchQuery)
 
         assertThat(result.total).isEqualTo(1L)
         assertThat(result.items.first()).isEqualTo("Maria")
+    }
+
+    @Test
+    fun `should findAll publishers with pagination search by name with success`(): Unit = runBlocking {
+        val firstBook = BookBuilder.build(publisher = Publisher.from("Boa Nova"))
+        val secondBook = BookBuilder.build(publisher = Publisher.from("FEB"))
+        subject.create(firstBook)
+        subject.create(secondBook)
+
+        val searchQuery = SearchQuery(0, 1, "feb", "publisher")
+        val result = subject.findAllPublishers(searchQuery)
+
+        assertThat(result.total).isEqualTo(1L)
+        assertThat(result.items.first()).isEqualTo("FEB")
     }
 }
