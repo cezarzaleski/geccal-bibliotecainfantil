@@ -5,5 +5,5 @@ data class SearchQuery(
     val perPage: Int,
     val terms: String,
     val sort: String,
-    val direction: String
+    val direction: String = Pagination.DEFAULT_DIRECTION
 )
