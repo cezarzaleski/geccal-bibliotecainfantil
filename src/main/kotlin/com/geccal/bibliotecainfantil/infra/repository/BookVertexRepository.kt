@@ -18,7 +18,7 @@ import java.time.temporal.ChronoUnit
 
 class BookVertexRepository(
     private val connection: Connection
-) : BookRepository {
+) : BookRepository, AbstractVertexRepository(connection) {
 
     override suspend fun create(book: Book): Book {
         connection.persist(
@@ -39,12 +39,12 @@ class BookVertexRepository(
                 WHERE id = #{id}""",
             mapOf("id" to id.value)
         )
-        if (bookDataList.size() == 0) throw NotFoundException.from("Book", id)
+        if (bookDataList.isEmpty()) throw NotFoundException.from("Book", id)
         return bookDataList.first().toBook()
     }
 
     override suspend fun findAll(query: SearchQuery): Pagination<Book> {
-        val (page, perPage, terms, sort, direction) = query
+        val (page, perPage, terms) = query
         var params = emptyMap<String, Any>()
         var statement = """SELECT id, name, exemplary, status, edition, 
             year, publisher, origin, authors, createdAt, updatedAt, deletedAt
@@ -57,10 +57,10 @@ class BookVertexRepository(
             )
         }
         val total = countItems(statement, params)
-        statement += "ORDER BY $sort $direction LIMIT $perPage OFFSET $page"
+        statement = statement.mountPaginated(query)
 
         val bookDataList = connection.query<RowSet<Row>>(statement, params)
-        if (bookDataList.size() == 0) return Pagination.empty(page, perPage)
+        if (bookDataList.isEmpty()) return Pagination.empty(page, perPage)
         return Pagination(
             currentPage = page,
             perPage = perPage,
@@ -70,7 +70,7 @@ class BookVertexRepository(
     }
 
     override suspend fun findAllAuthors(query: SearchQuery): Pagination<String> {
-        val (page, perPage, terms, sort, direction) = query
+        val (page, perPage, terms) = query
 
         var statement = """
             SELECT DISTINCT author
@@ -84,13 +84,13 @@ class BookVertexRepository(
         if (terms.isNotEmpty()) {
             statement += " AND LOWER(author) LIKE #{terms} "
         }
-        statement += "ORDER BY $sort $direction LIMIT $perPage OFFSET $page"
+        statement = statement.mountPaginated(query)
 
         val params = mapOf(
             "terms" to "%${terms.lowercase()}%"
         )
         val bookDataList = connection.query<RowSet<Row>>(statement, params)
-        if (bookDataList.size() == 0) return Pagination.empty(page, perPage)
+        if (bookDataList.isEmpty()) return Pagination.empty(page, perPage)
         return Pagination(
             currentPage = page,
             perPage = perPage,
@@ -100,7 +100,7 @@ class BookVertexRepository(
     }
 
     override suspend fun findAllPublishers(query: SearchQuery): Pagination<String> {
-        val (page, perPage, terms, sort, direction) = query
+        val (page, perPage, terms) = query
 
         var statement = "SELECT DISTINCT publisher FROM books"
         var params = emptyMap<String, Any>()
@@ -108,10 +108,10 @@ class BookVertexRepository(
             statement += " WHERE LOWER(publisher) LIKE #{terms}"
             params = mapOf("terms" to "%${terms.lowercase()}%")
         }
-        statement += " ORDER BY $sort $direction LIMIT $perPage OFFSET ${page * perPage}"
+        statement = statement.mountPaginated(query)
 
         val publishers = connection.query<RowSet<Row>>(statement, params)
-        if (publishers.size() == 0) return Pagination.empty(page, perPage)
+        if (publishers.isEmpty()) return Pagination.empty(page, perPage)
         return Pagination(
             currentPage = page,
             perPage = perPage,
@@ -172,11 +172,5 @@ class BookVertexRepository(
             "updatedAt" to this.updatedAt,
             "deletedAt" to this.deletedAt
         )
-    }
-
-    private suspend fun countItems(statement: String, params: Map<String, Any>): Long {
-        val statementCount = "SELECT count(1) as total from ($statement) as query"
-        return connection.query<RowSet<Row>>(statementCount, params)
-            .first().getLong("total")
     }
 }
