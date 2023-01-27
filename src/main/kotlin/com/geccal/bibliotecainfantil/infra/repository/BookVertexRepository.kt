@@ -71,7 +71,7 @@ class BookVertexRepository(
 
     override suspend fun findAllAuthors(query: SearchQuery): Pagination<String> {
         val (page, perPage, terms) = query
-
+        var params = emptyMap<String, Any>()
         var statement = """
             SELECT DISTINCT author
             from
@@ -83,19 +83,19 @@ class BookVertexRepository(
                     ) a WHERE 1=1"""
         if (terms.isNotEmpty()) {
             statement += " AND LOWER(author) LIKE #{terms} "
+            params = mapOf(
+                "terms" to "%${terms.lowercase()}%"
+            )
         }
         statement = statement.mountPaginated(query)
 
-        val params = mapOf(
-            "terms" to "%${terms.lowercase()}%"
-        )
-        val bookDataList = connection.query<RowSet<Row>>(statement, params)
-        if (bookDataList.isEmpty()) return Pagination.empty(page, perPage)
+        val authors = connection.query<RowSet<Row>>(statement, params)
+        if (authors.isEmpty()) return Pagination.empty(page, perPage)
         return Pagination(
             currentPage = page,
             perPage = perPage,
             total = countItems(statement, params),
-            items = bookDataList.map { it.getString("author") }
+            items = authors.map { it.getString("author") }
         )
     }
 
