@@ -32,15 +32,15 @@ class BookVertexRepository(
     }
 
     override suspend fun findById(id: BookID): Book {
-        val bookDataList = connection.query<RowSet<Row>>(
+        val book = connection.query<RowSet<Row>>(
             """SELECT id, name, exemplary, status, edition,
                 year, publisher, origin, authors, createdAt, updatedAt, deletedAt
                 FROM books
                 WHERE id = #{id}""",
             mapOf("id" to id.value)
         )
-        if (bookDataList.isEmpty()) throw NotFoundException.from("Book", id)
-        return bookDataList.first().toBook()
+        if (book.isEmpty()) throw NotFoundException.from("Book", id)
+        return book.first().toBook()
     }
 
     override suspend fun findAll(query: SearchQuery): Pagination<Book> {
@@ -59,13 +59,13 @@ class BookVertexRepository(
         val total = countItems(statement, params)
         statement = statement.mountPaginated(query)
 
-        val bookDataList = connection.query<RowSet<Row>>(statement, params)
-        if (bookDataList.isEmpty()) return Pagination.empty(page, perPage)
+        val books = connection.query<RowSet<Row>>(statement, params)
+        if (books.isEmpty()) return Pagination.empty(page, perPage)
         return Pagination(
             currentPage = page,
             perPage = perPage,
             total = total,
-            items = bookDataList.map { it.toBook() }
+            items = books.map { it.toBook() }
         )
     }
 
