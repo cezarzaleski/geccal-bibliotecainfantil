@@ -45,26 +45,26 @@ class BookVertexRepository(
 
     override suspend fun findAll(query: SearchQuery): Pagination<Book> {
         val (page, perPage, terms, sort, direction) = query
+        var params = emptyMap<String, Any>()
         var statement = """SELECT id, name, exemplary, status, edition, 
             year, publisher, origin, authors, createdAt, updatedAt, deletedAt
             FROM books
             WHERE 1=1 """
         if (terms.isNotEmpty()) {
             statement += "AND ((LOWER(name) LIKE #{terms}) OR (LOWER(publisher) LIKE #{terms})) "
+            params = mapOf(
+                "terms" to "%${terms.lowercase()}%"
+            )
         }
-        val statementCount = "SELECT count(1) as total from ($statement) as query"
+        val total = countItems(statement, params)
         statement += "ORDER BY $sort $direction LIMIT $perPage OFFSET $page"
 
-        val params = mapOf(
-            "terms" to "%${terms.lowercase()}%"
-        )
         val bookDataList = connection.query<RowSet<Row>>(statement, params)
-        val countResult = connection.query<RowSet<Row>>(statementCount, params)
         if (bookDataList.size() == 0) return Pagination.empty(page, perPage)
         return Pagination(
             currentPage = page,
             perPage = perPage,
-            total = countResult.first().getLong("total"),
+            total = total,
             items = bookDataList.map { it.toBook() }
         )
     }
@@ -84,19 +84,17 @@ class BookVertexRepository(
         if (terms.isNotEmpty()) {
             statement += " AND LOWER(author) LIKE #{terms} "
         }
-        val statementCount = "SELECT count(1) as total from ($statement) as query"
         statement += "ORDER BY $sort $direction LIMIT $perPage OFFSET $page"
 
         val params = mapOf(
             "terms" to "%${terms.lowercase()}%"
         )
         val bookDataList = connection.query<RowSet<Row>>(statement, params)
-        val countResult = connection.query<RowSet<Row>>(statementCount, params)
         if (bookDataList.size() == 0) return Pagination.empty(page, perPage)
         return Pagination(
             currentPage = page,
             perPage = perPage,
-            total = countResult.first().getLong("total"),
+            total = countItems(statement, params),
             items = bookDataList.map { it.getString("author") }
         )
     }
@@ -111,15 +109,13 @@ class BookVertexRepository(
             params = mapOf("terms" to "%${terms.lowercase()}%")
         }
         statement += " ORDER BY $sort $direction LIMIT $perPage OFFSET ${page * perPage}"
-        val statementCount = "SELECT count(1) as total from ($statement) as query"
 
         val publishers = connection.query<RowSet<Row>>(statement, params)
-        val countResult = connection.query<RowSet<Row>>(statementCount, params)
         if (publishers.size() == 0) return Pagination.empty(page, perPage)
         return Pagination(
             currentPage = page,
             perPage = perPage,
-            total = countResult.first().getLong("total"),
+            total = countItems(statement, params),
             items = publishers.map { it.getString("publisher") }
         )
     }
@@ -176,5 +172,11 @@ class BookVertexRepository(
             "updatedAt" to this.updatedAt,
             "deletedAt" to this.deletedAt
         )
+    }
+
+    private suspend fun countItems(statement: String, params: Map<String, Any>): Long {
+        val statementCount = "SELECT count(1) as total from ($statement) as query"
+        return connection.query<RowSet<Row>>(statementCount, params)
+            .first().getLong("total")
     }
 }
