@@ -85,7 +85,7 @@ jobs:
 
   sonarcloud-scan:
     name: SonarCloud Scan
-    needs: [test, component-test]
+    needs: [test, componentTest]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
