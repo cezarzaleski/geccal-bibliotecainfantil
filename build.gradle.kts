@@ -15,6 +15,7 @@ val jackson_datatype_jsr: String by project
 plugins {
     application
     kotlin("jvm") version "1.7.22"
+    id("org.sonarqube") version "3.5.0.2730"
     id("jacoco")
     id("io.ktor.plugin") version "2.1.3"
     id("io.gitlab.arturbosch.detekt") version "1.22.0"
@@ -131,6 +132,34 @@ tasks.withType<Test> {
     useJUnitPlatform()
     jvmArgs(listOf("--add-opens=java.base/java.time=ALL-UNNAMED"))
 }
+
+// START OF SONAR MULTI-MODULE CONFIGURATION
+sonar {
+    properties {
+        property("sonar.projectKey", "cezarzaleski_geccal-bibliotecainfantil")
+        property("sonar.projectName", "geccal-bibliotecainfantil")
+        property("sonar.organization", "cezarzaleski")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            "${projectDir.parentFile.path}/build/reports/jacoco/**/**.xml"
+        )
+        property("sonar.exclusions", "build/generated/**/*")
+    }
+}
+
+subprojects {
+    sonar {
+        properties {
+            property(
+                "sonar.coverage.jacoco.xmlReportPaths",
+                "${projectDir.parentFile.path}/build/reports/jacoco/**/**.xml"
+            )
+        }
+    }
+}
+// END OF SONAR MULTI-MODULE CONFIGURATION
+
 
 subprojects {
     apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")

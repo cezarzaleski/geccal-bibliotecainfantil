@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - develop
+  workflow_dispatch:
+
 jobs:
   build:
     name: Gradle Build
@@ -36,7 +38,6 @@ jobs:
           cache: gradle
       - name: Run tests with gradle
         run: ./gradlew test
-
 
   componentTest:
     runs-on: ubuntu-latest
@@ -81,3 +82,35 @@ jobs:
           MYSQL_PASSWORD: password
           MYSQL_HOST: localhost
           MYSQL_PORT: 3306
+
+  sonarcloud-scan:
+    name: SonarCloud Scan
+    needs: [test, component-test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'adopt'
+          cache: gradle
+      - name: Cache Gradle packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build jacocoTestReport sonar --info
