@@ -93,11 +93,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: 'gradle'
-      - run: gradle jacocoTestReport -i
+      - run: gradle jacocoTestReport
       - uses: actions/upload-artifact@v3
         with:
           name: report
-          path: build/reports/jacoco/*
+          path: c
 
   coverage:
     runs-on: ubuntu-latest
