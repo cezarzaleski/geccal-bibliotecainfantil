@@ -148,18 +148,6 @@ sonar {
     }
 }
 
-subprojects {
-    sonar {
-        properties {
-            property(
-                "sonar.coverage.jacoco.xmlReportPaths",
-                "${projectDir.parentFile.path}/build/reports/jacoco/**/**.xml"
-            )
-        }
-    }
-}
-// END OF SONAR MULTI-MODULE CONFIGURATION
-
 
 subprojects {
     apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")
