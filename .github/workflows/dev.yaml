@@ -116,7 +116,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: report
-          path: build/reports/jacoco/*
+          path: build/reports/
           if-no-files-found: error
 
   coverage:
