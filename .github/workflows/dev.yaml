@@ -38,10 +38,6 @@ jobs:
           cache: gradle
       - name: Run tests with gradle
         run: ./gradlew test
-      - uses: actions/upload-artifact@v3
-        with:
-          name: junit
-          path: .*/build/test-results/.*xml
 
   componentTest:
     runs-on: ubuntu-latest
@@ -86,10 +82,20 @@ jobs:
           MYSQL_PASSWORD: password
           MYSQL_HOST: localhost
           MYSQL_PORT: 3306
-      - uses: actions/upload-artifact@v3
-        with:
-          name: junit
-          path: .*/build/test-results/.*xml
+
+  matrix:
+    name: Matrix Jobs
+    needs: [test, componentTest]
+    container: ubuntu
+    defaults:
+      run:
+        working-directory: ${{ matrix.folder }}
+    strategy:
+      matrix:
+        folder: ${{ fromJson(needs.find-jobs.outputs.folders )}}
+    steps:
+      - name: do something
+        run: echo ${{ matrix.folder }}
 
   testReport:
     runs-on: ubuntu-latest
