@@ -127,7 +127,7 @@ jobs:
       - name: Upload JaCoCo Results
         uses: codecov/codecov-action@v3
         with:
-          files: app/build/reports/jacoco/test/jacocoTestReport.xml
+          files: build/reports/jacoco/test/jacocoTestReport.xml
           fail_ci_if_error: true
       - uses: actions/upload-artifact@v3
         with:
@@ -162,9 +162,9 @@ jobs:
       - name: Analyze with SonarQube
         uses: sonarsource/sonarqube-scan-action@v1
         with:
-          projectBaseDir: ./app
+          projectBaseDir: ./
           extraProperties: |
-            sonar.coverage.jacoco.xmlReportPaths=app/build/reports/jacoco/test/jacocoTestReport.xml
+            sonar.coverage.jacoco.xmlReportPaths=./build/reports/jacoco/test/jacocoTestReport.xml
             sonar.java.coveragePlugin=jacoco
           name: SonarQube
         env:
