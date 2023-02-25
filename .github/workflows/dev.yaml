@@ -44,7 +44,7 @@ jobs:
           name: unit-test-results
           path: |
             build/test-results
-            build/reports/
+            build/jacoco/*
           if-no-files-found: error
 
   componentTest:
@@ -96,7 +96,7 @@ jobs:
           name: component-test-results
           path: |
             build/test-results
-            build/reports/
+            build/jacoco/*
           if-no-files-found: error
 
   testReport:
@@ -118,12 +118,12 @@ jobs:
           name: unit-test-results
           path: |
             build/test-results
-            build/reports/
+            build/jacoco/*
       - name: Download Component Test Report Artifact
         uses: actions/download-artifact@v3
         with:
           name: component-test-results
-          path: build/reports/jacoco
+          path: build/jacoco/*
       - run: ./gradlew jacocoTestReport
       - uses: actions/upload-artifact@v3
         with:
