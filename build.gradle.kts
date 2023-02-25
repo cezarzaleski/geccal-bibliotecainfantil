@@ -142,7 +142,8 @@ sonar {
         property("sonar.host.url", "https://sonarcloud.io")
         property(
             "sonar.coverage.jacoco.xmlReportPaths",
-            "${projectDir.parentFile.path}/build/reports/jacoco/**/**.xml"
+            "${projectDir.parentFile.path}/build/reports/jacoco/test/jacocoTestReport.xml"
+
         )
         property("sonar.exclusions", "build/generated/**/*")
     }
