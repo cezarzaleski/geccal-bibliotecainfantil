@@ -162,4 +162,6 @@ jobs:
           path: build/reports/jacoco/test/jacocoTestReport.xml
       - run: ./gradlew sonar -info
         env:
+          ACTIONS_STEP_DEBUG: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
