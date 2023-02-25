@@ -121,7 +121,7 @@ jobs:
         with:
           name: component-test-results
           path: build/jacoco
-      - run: ./gradlew jacocoTestReport
+      - run: ./gradlew jacocoTestCoverageVerification jacocoTestReport
         env:
           ACTIONS_STEP_DEBUG: true
       - uses: actions/upload-artifact@v3
