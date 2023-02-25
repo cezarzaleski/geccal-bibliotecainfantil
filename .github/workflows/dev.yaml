@@ -115,12 +115,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: unit-test-results
-          path: build/test
+          path: build/jacoco
       - name: Download Component Test Report Artifact
         uses: actions/download-artifact@v3
         with:
           name: component-test-results
-          path: build/componentTest
+          path: build/jacoco
       - run: ./gradlew jacocoTestReport
       - uses: actions/upload-artifact@v3
         with:
