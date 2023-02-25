@@ -125,7 +125,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: report
-          path: build/reports/jacoco/*
+          path: build/reports/jacoco/test/jacocoTestReport.xml
           if-no-files-found: error
 
   coverage:
@@ -159,7 +159,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: report
-          path: build/reports/jacoco
+          path: build/reports/jacoco/test/jacocoTestReport.xml
       - run: ./gradlew sonar -info
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
