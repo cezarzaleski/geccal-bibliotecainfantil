@@ -37,11 +37,11 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
       - name: Run tests with gradle
-        run: ./gradlew test
+        run: ./gradlew test -i
       - name: Save test report
         uses: actions/upload-artifact@v3
         with:
-          name: Test report
+          name: unit-test-results
           path: |
             build/test-results
             build/reports/
@@ -101,50 +101,68 @@ jobs:
 
   testReport:
     runs-on: ubuntu-latest
-    needs: [ test, componentTest ]
+    needs: [test, componentTest]
+    steps:
+      - name: List files
+        run: ls -lha
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+      - name: Download Unit Test Report Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: unit-test-results
+          path: |
+            build/test-results
+            build/reports/
+      - name: Download Component Test Report Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: component-test-results
+          path: build/reports/jacoco
+      - run: gradle jacocoTestReport
+      - uses: actions/upload-artifact@v3
+        with:
+          name: report
+          path: build/reports/jacoco/*
+          if-no-files-found: error
+
+  coverage:
+    runs-on: ubuntu-latest
+    needs: [test, componentTest]
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          java-version: 17
-      - name: Build with Gradle
-        run: ./gradlew build
-      - name: Run Jacoco
-        run: ./gradlew jacocoTestReport
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage
-          path: build/reports/jacoco/test/html/index.html
-
-#  coverage:
-#    runs-on: ubuntu-latest
-#    needs: [ test, componentTest ]
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v3
-#        with:
-#          java-version: '17'
-#          distribution: 'temurin'
-#          cache: 'gradle'
-#      - run: gradle jacocoTestCoverageVerification -i
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+      - run: gradle jacocoTestCoverageVerification -i
 
   sonarcloud-scan:
     name: SonarCloud Scan
-    needs: testReport
     runs-on: ubuntu-latest
+    needs: testReport
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          java-version: 17
-      - name: Build with Gradle
-        run: ./gradlew build -x test -x componentTest
-      - name: Run Sonar
-        uses: sonarsource/sonarcloud-github-action@master
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+      - name: Download Test Report Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: report
+          path: build/reports/jacoco
+      - run: gradle sonar
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
