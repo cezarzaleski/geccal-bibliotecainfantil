@@ -168,7 +168,7 @@ jobs:
           name: report
           path: build/reports/jacoco
       - name: List files
-        run: ls
+        run: ls build/reports/jacoco/test
       - run: ./gradlew sonar -info
         env:
           ACTIONS_STEP_DEBUG: true
