@@ -112,11 +112,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: 'gradle'
-      - run: gradle jacocoTestReport
+      - run: gradle jacocoTestReport -i
       - uses: actions/upload-artifact@v3
         with:
           name: report
-          path: build/reports/jacoco/
+          path: build/reports/jacoco/*
           if-no-files-found: error
 
   coverage:
