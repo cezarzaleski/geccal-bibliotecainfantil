@@ -124,7 +124,7 @@ jobs:
         with:
           name: component-test-results
           path: build/reports/jacoco
-      - run: gradle jacocoTestReport
+      - run: ./gradlew jacocoTestReport
       - uses: actions/upload-artifact@v3
         with:
           name: report
