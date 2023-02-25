@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: unit-test-results
-          path: build/reports/tests/test
+          path: build/jacoco/test.exec
           if-no-files-found: error
 
   componentTest:
@@ -92,7 +92,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: component-test-results
-          path: build/reports/tests/componentTest
+          path: build/jacoco/componentTest.exec
           if-no-files-found: error
 
   testReport:
