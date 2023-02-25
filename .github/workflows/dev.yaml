@@ -37,15 +37,7 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
       - name: Run tests with gradle
-        run: ./gradlew test
-      - name: Save test report
-        uses: actions/upload-artifact@v3
-        with:
-          name: Test report
-          path: |
-            build/test-results
-            build/reports/
-          if-no-files-found: error
+        run: ./gradlew test -i
 
   componentTest:
     runs-on: ubuntu-latest
@@ -83,25 +75,17 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
       - name: Run componentTest with gradle
-        run: ./gradlew componentTest
+        run: ./gradlew componentTest -i
         env:
           MYSQL_DATABASE: db
           MYSQL_USER: user
           MYSQL_PASSWORD: password
           MYSQL_HOST: localhost
           MYSQL_PORT: 3306
-      - name: Store test results
-        uses: actions/upload-artifact@v3
-        with:
-          name: component-test-results
-          path: |
-            build/test-results
-            build/reports/
-          if-no-files-found: error
 
   testReport:
     runs-on: ubuntu-latest
-    needs: [test, componentTest]
+#    needs: [test, componentTest]
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -110,9 +94,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: 'gradle'
-      - run: ./gradlew jacocoTestReport
+      - run: ./gradlew jacocoTestReport -i
       - name: List files
-        run: ls  build/reports
+        run: ls  build
       - uses: actions/upload-artifact@v3
         with:
           name: report
@@ -121,7 +105,7 @@ jobs:
 
   coverage:
     runs-on: ubuntu-latest
-    needs: [test, componentTest]
+#    needs: [test, componentTest]
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -130,7 +114,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: 'gradle'
-      - run: ./gradlew jacocoTestCoverageVerification
+      - run: ./gradlew jacocoTestCoverageVerification -i
 
   sonarcloud-scan:
     name: SonarCloud Scan
