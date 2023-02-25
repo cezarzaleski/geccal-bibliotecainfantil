@@ -134,8 +134,8 @@ jobs:
 
   sonarcloud-scan:
     name: SonarCloud Scan
-    runs-on: ubuntu-latest
     needs: [ test, componentTest ]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
@@ -160,5 +160,6 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
       - name: Build and analyze
         env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          run: ./gradlew build jacocoTestReport sonar --info
+        run: ./gradlew build codeCoverageReport sonar --info
