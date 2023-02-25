@@ -140,11 +140,11 @@ sonar {
         property("sonar.projectName", "geccal-bibliotecainfantil")
         property("sonar.organization", "cezarzaleski")
         property("sonar.host.url", "https://sonarcloud.io")
-        property(
-            "sonar.coverage.jacoco.xmlReportPaths",
-            "${projectDir.parentFile.path}/build/reports/jacoco/test/jacocoTestReport.xml"
-
-        )
+//        property(
+//            "sonar.coverage.jacoco.xmlReportPaths",
+//            "${projectDir.parentFile.path}/build/reports/jacoco/test/jacocoTestReport.xml"
+//
+//        )
         property("sonar.exclusions", "build/generated/**/*")
     }
 }
