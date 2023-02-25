@@ -112,7 +112,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: 'gradle'
-      - run: gradle jacocoTestReport
+      - run: ./gradlew jacocoTestReport
       - uses: actions/upload-artifact@v3
         with:
           name: report
@@ -130,7 +130,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: 'gradle'
-      - run: gradle jacocoTestCoverageVerification -i
+      - run: ./gradlew jacocoTestCoverageVerification
 
   sonarcloud-scan:
     name: SonarCloud Scan
