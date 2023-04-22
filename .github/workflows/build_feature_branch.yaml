@@ -1,0 +1,28 @@
+---
+name: Build Feature Branch
+
+on:
+  push:
+    branches-ignore:
+      - staging
+      - main
+
+permissions:
+  id-token: write
+  contents: write
+  issues: read
+  checks: write
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-application:
+    uses: ./.github/workflows/action_run_tests.yaml
+    secrets: inherit
+
+#  check-code-quality:
+#    uses: ./.github/workflows/action_verify_quality.yaml
+#    secrets: inherit
+#    needs: test-application
