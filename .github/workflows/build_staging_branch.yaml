@@ -4,7 +4,7 @@ name: Build Staging Branch
 on:
   push:
     branches:
-      - develop
+      - staging
 
 permissions:
   id-token: write
