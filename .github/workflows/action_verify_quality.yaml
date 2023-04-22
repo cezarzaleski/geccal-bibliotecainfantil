@@ -1,0 +1,50 @@
+---
+name: Code Quality Checks
+
+on:
+  workflow_call:
+      SONAR_TOKEN:
+        required: true
+
+env:
+  JAVA_TOOL_OPTIONS: "-Xmx3g"
+  GRADLE_OPTS: "-Dorg.gradle.workers.max=2"
+
+jobs:
+  sonar-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17.0.3
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Download unit test coverage results
+        uses: actions/download-artifact@v3
+        with:
+          name: unit-test-coverage
+
+      - name: Download component test coverage results
+        uses: actions/download-artifact@v3
+        with:
+          name: component-test-coverage
+
+      - name: Unpack coverage data
+        run: |
+          tar -xzvf unit-coverage.tar.gz
+          tar -xzvf component-coverage.tar.gz
+
+      - name: Build Coverage Report And Run Sonar Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew jacocoReport sonar -x detekt -x test -x componentTest --no-daemon --info --stacktrace
+
+      - name: Store Coverage Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: build/reports/jacoco

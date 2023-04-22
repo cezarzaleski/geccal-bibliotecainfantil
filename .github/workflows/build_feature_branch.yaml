@@ -22,7 +22,7 @@ jobs:
     uses: ./.github/workflows/action_run_tests.yaml
     secrets: inherit
 
-#  check-code-quality:
-#    uses: ./.github/workflows/action_verify_quality.yaml
-#    secrets: inherit
-#    needs: test-application
+  check-code-quality:
+    uses: ./.github/workflows/action_verify_quality.yaml
+    secrets: inherit
+    needs: test-application
