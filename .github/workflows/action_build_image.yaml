@@ -25,8 +25,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t my-docker-username/biblioteca-infantil:${{ github.sha }}
+          docker build . -t cezarzaleski/biblioteca-infantil:${{ github.sha }}
 
       - name: Push Docker image
         run: |
-          docker push my-docker-username/biblioteca-infantil:${{ github.sha }}
+          docker push cezarzaleski/biblioteca-infantil:${{ github.sha }}
