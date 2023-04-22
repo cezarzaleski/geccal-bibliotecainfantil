@@ -1,0 +1,31 @@
+---
+name: Build Staging Branch
+
+on:
+  push:
+    branches:
+      - develop
+
+permissions:
+  id-token: write
+  contents: write
+  issues: read
+  checks: write
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-application:
+    uses: ./.github/workflows/action_run_tests.yaml
+    secrets: inherit
+
+  build-image:
+    uses: ./.github/workflows/action_build_image.yaml
+    secrets: inherit
+
+#  deploy-image:
+#    uses: ./.github/workflows/action_deploy_staging.yaml
+#    secrets: inherit
+#    needs: [build-image, test-application]
