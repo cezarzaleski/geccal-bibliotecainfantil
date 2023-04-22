@@ -79,6 +79,12 @@ jobs:
 
       - name: Run component tests
         run: ./gradlew componentTest -x detekt -x test --no-daemon
+        env:
+          MYSQL_DATABASE: db
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+          MYSQL_HOST: localhost
+          MYSQL_PORT: 3306
         shell: bash
 
       - name: Zip Coverage Results
