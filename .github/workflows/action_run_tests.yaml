@@ -1,6 +1,9 @@
 ---
 name: Test Application Code
 
+on:
+  workflow_call:
+
 env:
   JAVA_TOOL_OPTIONS: "-Xmx3g"
   GRADLE_OPTS: "-Dorg.gradle.workers.max=2"
